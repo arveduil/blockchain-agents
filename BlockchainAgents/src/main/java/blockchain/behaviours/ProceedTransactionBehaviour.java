@@ -1,25 +1,33 @@
 package blockchain.behaviours;
 
 import blockchain.agents.AgentWithWallet;
+import blockchain.currency.Currency;
+import blockchain.currency.Dollar;
+import blockchain.currency.Ethereum;
 import blockchain.utils.MessageContent;
+import blockchain.utils.TransactionOffer;
 import blockchain.utils.Utils;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 
 import javax.rmi.CORBA.Util;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 
 public class ProceedTransactionBehaviour extends Behaviour {
     private int step = 0;
     private AID[] agentsWithSellOffer;
-    private BigDecimal amountToBuy;
+    private Ethereum amountToBuy;
     private MessageTemplate mt;
-    private AID seller;
     private AgentWithWallet agent;
+    private int repliesCount = 0;
+    private TransactionOffer<Dollar,Ethereum> bestTransaction;
 
-    public ProceedTransactionBehaviour(AgentWithWallet agent, BigDecimal amountToBuy, AID[] agentsWithSellOffer) {
+    public ProceedTransactionBehaviour(AgentWithWallet agent, Ethereum amountToBuy, AID[] agentsWithSellOffer) {
         super(agent);
 
         this.agent = agent;
@@ -53,7 +61,7 @@ public class ProceedTransactionBehaviour extends Behaviour {
 
                 decorateAcceptProposalOrderAsTransactionConfirmation(order);
 
-                Utils.log(this.agent,"Send ACCEPT_PROPOSAL to " + seller.getLocalName());
+                Utils.log(this.agent,"Send ACCEPT_PROPOSAL to " + bestTransaction.getOwnerAID().getLocalName());
 
                 myAgent.send(order);
 
@@ -62,7 +70,7 @@ public class ProceedTransactionBehaviour extends Behaviour {
                 step = 3;
                 break;
             case 3:
-                //confirm transaction
+                //TODO add receiving money when seller confirmed transaction
                 reply = myAgent.receive(mt);
                 if (reply != null) {
                     handleTransactionConfirmation(reply);
@@ -77,7 +85,9 @@ public class ProceedTransactionBehaviour extends Behaviour {
 
     private ACLMessage createCfpMessageAsBuyOffer() {
         ACLMessage cfp = setupCfpMessageWithReceivers();
-        cfp.setContent(amountToBuy.toString());
+
+        //TODO SET TRANSACTION OFFER CONTENT
+//        cfp.setContent(amountToBuy.toString());
         cfp.setConversationId("blockchain");
         cfp.setReplyWith("cfp" + System.currentTimeMillis());
         return cfp;
@@ -92,20 +102,46 @@ public class ProceedTransactionBehaviour extends Behaviour {
     }
 
     private void getSellerFromProposeReply(ACLMessage reply) {
-        if (reply.getPerformative() == ACLMessage.PROPOSE) {
-            //int price = Integer.parseInt(reply.getContent());
-            //TODO Gieda here
-            seller = reply.getSender();
+        repliesCount++;
 
-            Utils.log(agent.getLocalName(),"PROPOSE from seller" + reply.getSender().getLocalName());
-        }else{
-            Utils.log(agent.getLocalName(),"REFUSE from seller" + reply.getSender().getLocalName());
+        if (reply.getPerformative() == ACLMessage.PROPOSE) {
+            try {
+                TransactionOffer<Dollar, Ethereum> offer = (TransactionOffer<Dollar, Ethereum>) reply.getContentObject();
+
+
+                if (bestTransaction == null) {
+                    bestTransaction = offer;
+                } else {
+                    //TODO Check if client has enough money
+                    if (bestTransaction.getRate().compareTo(offer.getRate()) > -1) {
+                        bestTransaction = offer;
+                    }
+                }
+
+                if (repliesCount >= agentsWithSellOffer.length) {
+                    //all messages received go to step 2
+                    step = 2;
+                }
+
+                Utils.log(agent.getLocalName(), "PROPOSE from seller" + reply.getSender().getLocalName());
+
+        }catch(UnreadableException e){
+                e.printStackTrace();
+            }
         }
-    }
+        else{
+            Utils.log(agent.getLocalName(), "REFUSE from seller" + reply.getSender().getLocalName());
+        }
+        }
+
 
     private void decorateAcceptProposalOrderAsTransactionConfirmation(ACLMessage order) {
-        order.addReceiver(seller);
-        order.setContent(amountToBuy.toString());
+        order.addReceiver(bestTransaction.getOwnerAID());
+        try {
+            order.setContentObject(createReplyOffer(bestTransaction));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         order.setConversationId(MessageContent.TRANSACTION_CONFIRMATION.toString());
         order.setReplyWith("order"+System.currentTimeMillis());
     }
@@ -115,23 +151,27 @@ public class ProceedTransactionBehaviour extends Behaviour {
             succesfullyReceivedAmount(reply);
         }
         else {
-            Utils.log(agent.getLocalName(),"Transaction with " + reply.getSender().getLocalName() +" failed.");
+            Utils.log(agent.getLocalName(),"TransactionOffer with " + reply.getSender().getLocalName() +" failed.");
         }
     }
 
     private void succesfullyReceivedAmount(ACLMessage reply) {
         agent.addToWallet(amountToBuy);
         Utils.log(this.agent,"Received" + amountToBuy + " from " + reply.getSender().getLocalName());
-        Utils.log(this.agent,"Transaction finished successfully " + reply.getSender().getLocalName());
+        Utils.log(this.agent,"TransactionOffer finished successfully " + reply.getSender().getLocalName());
         Utils.logWalletState(this.agent);
     }
 
     @Override
         public boolean done() {
-            if (step == 2 && seller == null) {
+            if (step == 2 && bestTransaction == null) {
                 Utils.log(this.agent,"Cannot find seller");
             }
 
-            return ((step == 2 && seller == null) || step == 4);
+            return ((step == 2 && bestTransaction == null) || step == 4);
+        }
+
+        private TransactionOffer<Ethereum,Dollar> createReplyOffer(TransactionOffer<Dollar,Ethereum> offer){
+            return  new TransactionOffer<Ethereum, Dollar>(offer.getSellAmount(),offer.getBuyAmount(),this.agent.getAID());
         }
     }

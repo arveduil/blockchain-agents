@@ -1,6 +1,8 @@
 package blockchain.behaviours;
 
 import blockchain.agents.AgentWithWallet;
+import blockchain.currency.Currency;
+import blockchain.currency.Ethereum;
 import blockchain.utils.Utils;
 import jade.core.AID;
 import jade.core.Agent;
@@ -19,10 +21,10 @@ public class BuyerInitialBehaviour extends TickerBehaviour {
     private static final Logger LOGGER = Logger.getLogger( BuyerInitialBehaviour.class.getName() );
 
     private AgentWithWallet agentWithWallet;
-    private BigDecimal desiredAmount;
+    private Ethereum desiredAmount;
     private boolean finished = false;
 
-    public BuyerInitialBehaviour(AgentWithWallet agentWithWallet, long period, BigDecimal desiredAmount) {
+    public BuyerInitialBehaviour(AgentWithWallet agentWithWallet, long period, Ethereum desiredAmount) {
         super(agentWithWallet, period);
 
         this.agentWithWallet = agentWithWallet;
@@ -35,7 +37,7 @@ public class BuyerInitialBehaviour extends TickerBehaviour {
         Utils.log(agentWithWallet.getLocalName(),"Buyers looks for " + desiredAmount);
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
-        sd.setType("blockchain");
+        sd.setType(Ethereum.getCurrencyName());
         template.addServices(sd);
         try
         {

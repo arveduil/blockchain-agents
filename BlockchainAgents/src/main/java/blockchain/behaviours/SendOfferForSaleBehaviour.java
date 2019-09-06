@@ -1,21 +1,26 @@
 package blockchain.behaviours;
 
 import blockchain.agents.AgentWithWallet;
+import blockchain.currency.Currency;
+import blockchain.currency.Dollar;
+import blockchain.currency.Ethereum;
 import blockchain.utils.MessageContent;
+import blockchain.utils.TransactionOffer;
 import blockchain.utils.Utils;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 public class SendOfferForSaleBehaviour extends CyclicBehaviour {
-    private BigDecimal amountToOffer;
+    private BigDecimal rate;
     private AgentWithWallet agentWithWallet;
 
-    public SendOfferForSaleBehaviour(AgentWithWallet a, BigDecimal amountToOffer) {
+    public SendOfferForSaleBehaviour(AgentWithWallet a, BigDecimal rate) {
         super(a);
-        this.amountToOffer = amountToOffer;
+        this.rate = rate;
         this.agentWithWallet = a;
     }
 
@@ -39,24 +44,18 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
     }
 
     private void handleMessageFromBuyer(ACLMessage msg) {
-        BigDecimal amountRequested = new BigDecimal(msg.getContent());
+        String currencyRequested = msg.getContent();
         ACLMessage reply = msg.createReply();
+        Utils.log(agentWithWallet,"Currency requested: " + currencyRequested + " amount to offer " + agentWithWallet.getWalletState(currencyRequested));
 
-        decorateReplyWithDecision(amountRequested, reply);
-
-        myAgent.send(reply);
-    }
-
-    private void decorateReplyWithDecision(BigDecimal amountRequested, ACLMessage reply) {
-        Utils.log(agentWithWallet,"Amount requested: " + amountRequested + " amount to offer " + agentWithWallet.getWalletState());
-
-        //TODO change condition
-        if (requestedAmountIsLessThanOffer(amountRequested)){
-            fillReplyWithPropose(reply);
-        }
-        else{
+        if(!this.agentWithWallet.containsMoneyInCurrency(currencyRequested)){
             fillReplyWithRefuse(reply);
         }
+
+
+        fillReplyWithPropose(reply);
+
+        myAgent.send(reply);
     }
 
     private void fillReplyWithRefuse(ACLMessage reply) {
@@ -69,17 +68,28 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
 
     private void fillReplyWithPropose(ACLMessage reply) {
         reply.setPerformative(ACLMessage.PROPOSE);
-        reply.setContent(String.valueOf(myAgent.getAID()));
+
+        try {
+            reply.setContentObject(this.createTransactionOffer());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Utils.log(agentWithWallet,"Response PROPOSE");
     }
 
-    private boolean requestedAmountIsLessThanOffer(BigDecimal amountRequested){
-        return amountRequested.compareTo(amountToOffer) != 1;
-    }
+//    private boolean requestedAmountIsLessThanOffer(BigDecimal amountRequested){
+//        return amountRequested.compareTo(amountToOffer) != 1;
+//    }
 
-    //TODO add to condition whether or not make decision
-    private boolean agentHasNotEnoughMoneyInWalletToOffer(){
-        return agentWithWallet.getWalletState().compareTo(this.amountToOffer) == -1;
+//    //TODO add to condition whether or not make decision
+//    private boolean agentHasNotEnoughMoneyInWalletToOffer(){
+//        return agentWithWallet.getWalletState().compareTo(this.amountToOffer) == -1;
+//    }
+
+    private  TransactionOffer<Dollar, Ethereum> createTransactionOffer(){
+        Ethereum sellAmount = this.agentWithWallet.getWalletState(Ethereum.getCurrencyName());
+        Dollar buyAmount = (Dollar) this.rate.multiply(sellAmount);
+        return new TransactionOffer<Dollar, Ethereum>(buyAmount, sellAmount, this.agentWithWallet.getAID());
     }
 }

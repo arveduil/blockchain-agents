@@ -1,6 +1,7 @@
 package blockchain.agents;
 
 import blockchain.behaviours.BuyerInitialBehaviour;
+import blockchain.currency.Ethereum;
 import blockchain.utils.Utils;
 import jade.core.AID;
 
@@ -8,7 +9,7 @@ import jade.core.AID;
 import java.math.BigDecimal;
 
 public class ClientAgent extends AgentWithWallet {
-    private BigDecimal desiredAmount = new BigDecimal(80);
+    private Ethereum desiredAmount = new Ethereum(80);
 
     protected void setup() {
         Utils.log(getAID().getLocalName(), " is ready");

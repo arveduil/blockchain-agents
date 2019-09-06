@@ -1,11 +1,15 @@
 package blockchain.behaviours;
 
 import blockchain.agents.AgentWithWallet;
+import blockchain.currency.Dollar;
+import blockchain.currency.Ethereum;
+import blockchain.utils.TransactionOffer;
 import blockchain.utils.Utils;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
 
 import java.math.BigDecimal;
 
@@ -20,16 +24,17 @@ public class PurchaseSellBehaviour extends Behaviour {
 
     @Override
     public void action() {
-        //tylko zlecenia kupna, ktore stanowia akceptacje oferty
         MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
         ACLMessage msg = myAgent.receive(mt);
         if (msg != null) {
-            BigDecimal amountToSell = new BigDecimal(msg.getContent());
+            try {
+                TransactionOffer<Ethereum,Dollar> offerConfirmationFromBuyer = (TransactionOffer<Ethereum,Dollar>) msg.getContentObject();
+
             ACLMessage reply = msg.createReply();
-            if(agentWithWallet.getWalletState().compareTo(amountToSell) != -1){
+            if(agentWithWallet.getWalletState(Ethereum.getCurrencyName()).compareTo(offerConfirmationFromBuyer.getBuyAmount()) > -1){
                 reply.setPerformative(ACLMessage.INFORM);
 
-                agentWithWallet.substractFromWallet(amountToSell);
+                agentWithWallet.substractFromWallet(offerConfirmationFromBuyer.getBuyAmount());
                 reply.setContent("money substracted");
 
                 Utils.log(agentWithWallet,"Giving money to " + msg.getSender().getLocalName());
@@ -41,6 +46,9 @@ public class PurchaseSellBehaviour extends Behaviour {
             }
 
             myAgent.send(reply);
+            } catch (UnreadableException e) {
+                e.printStackTrace();
+            }
         }
         else {
             block();

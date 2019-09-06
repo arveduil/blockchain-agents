@@ -1,26 +1,32 @@
 package blockchain.agents;
 
 
+import blockchain.currency.Currency;
+import blockchain.utils.Wallet;
 import jade.core.Agent;
 
 import java.math.BigDecimal;
 
 public class AgentWithWallet extends Agent {
-    private BigDecimal wallet = BigDecimal.ZERO;
+    private Wallet wallet = new Wallet();
 
-    public BigDecimal getWalletState(){
-        return wallet;
+    public <T extends Currency> T  getWalletState(String currencyName){
+        return wallet.getAmount(currencyName);
     }
 
-    public void setWallet(BigDecimal wallet){
-        this.wallet = wallet;
+    public <T extends Currency> T  addToWallet(T amount){
+       return wallet.addToWallet(amount);
     }
 
-    public void addToWallet(BigDecimal money){
-        this.wallet = wallet.add(money);
+    public <T extends Currency> T  substractFromWallet(T amount){
+        return wallet.substractFromWallet(amount);
     }
 
-    public void substractFromWallet(BigDecimal money){
-        this.wallet = wallet.subtract(money);
+    public Boolean containsCurrency(String currencyName){
+        return wallet.containsCurrency(currencyName);
+    }
+
+    public Boolean containsMoneyInCurrency(String currencyName){
+        return wallet.containsMoneyInCurrency(currencyName);
     }
 }

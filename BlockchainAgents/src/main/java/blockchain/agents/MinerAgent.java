@@ -3,6 +3,8 @@ package blockchain.agents;
 import blockchain.behaviours.MiningBehaviour;
 import blockchain.behaviours.PurchaseSellBehaviour;
 import blockchain.behaviours.SendOfferForSaleBehaviour;
+import blockchain.currency.Dollar;
+import blockchain.currency.Ethereum;
 import blockchain.utils.Utils;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -18,14 +20,14 @@ public class MinerAgent extends AgentWithWallet {
     protected void setup() {
         Utils.log(getAID().getLocalName(), " is ready");
         int interval = 2000;
-        BigDecimal miningIncome = new BigDecimal(20);
-        BigDecimal sellOfferAmount = new BigDecimal(100);
+        Ethereum miningIncome = new Ethereum(20);
+        BigDecimal sellOfferRate = BigDecimal.ONE;
         //Args: 0 mining interval, 1 mining income,
         Object[] args = getArguments();
         if (args != null && args.length > 0){
             interval = Integer.parseInt (args[0].toString());
-            miningIncome = new BigDecimal (args[1].toString());
-            sellOfferAmount = new BigDecimal (args[2].toString());
+            miningIncome = new Ethereum(args[1].toString());
+            sellOfferRate = new BigDecimal(args[2].toString());
         }
 
         DFAgentDescription dfd = new DFAgentDescription();
@@ -41,7 +43,7 @@ public class MinerAgent extends AgentWithWallet {
         }
 
         addBehaviour(new MiningBehaviour(this,interval,miningIncome));
-        addBehaviour(new SendOfferForSaleBehaviour(this,sellOfferAmount));
+        addBehaviour(new SendOfferForSaleBehaviour(this,sellOfferRate));
         addBehaviour(new PurchaseSellBehaviour(this));
 
     }
