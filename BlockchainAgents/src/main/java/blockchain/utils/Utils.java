@@ -1,6 +1,6 @@
 package blockchain.utils;
 
-import blockchain.agents.AgentWithWallet;
+import blockchain.agents.ClientAgent;
 import jade.core.Agent;
 
 import java.time.Instant;
@@ -16,7 +16,7 @@ public  class Utils {
         Utils.log(author.getLocalName(),message);
     }
 
-    public static void logWalletState(AgentWithWallet authorAgent){
+    public static void logWalletState(ClientAgent authorAgent){
         Utils.log(authorAgent,"Wallet state: " + authorAgent.getWalletState());
     }
 }

@@ -1,6 +1,7 @@
 package blockchain.behaviours;
 
-import blockchain.agents.AgentWithWallet;
+import blockchain.agents.ClientAgent;
+import blockchain.currencies.Ethereum;
 import blockchain.utils.MessageContent;
 import blockchain.utils.Utils;
 import jade.core.AID;
@@ -8,18 +9,15 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import javax.rmi.CORBA.Util;
-import java.math.BigDecimal;
-
 public class ProceedTransactionBehaviour extends Behaviour {
     private int step = 0;
     private AID[] agentsWithSellOffer;
-    private BigDecimal amountToBuy;
+    private Ethereum amountToBuy;
     private MessageTemplate mt;
     private AID seller;
-    private AgentWithWallet agent;
+    private ClientAgent agent;
 
-    public ProceedTransactionBehaviour(AgentWithWallet agent, BigDecimal amountToBuy, AID[] agentsWithSellOffer) {
+    public ProceedTransactionBehaviour(ClientAgent agent, Ethereum amountToBuy, AID[] agentsWithSellOffer) {
         super(agent);
 
         this.agent = agent;
@@ -62,7 +60,9 @@ public class ProceedTransactionBehaviour extends Behaviour {
                 step = 3;
                 break;
             case 3:
-                //confirm transaction
+                //confirm transaction receive
+                //HERE RECEIVER ADD MONEY TO ACCOUNT
+                //
                 reply = myAgent.receive(mt);
                 if (reply != null) {
                     handleTransactionConfirmation(reply);
@@ -93,8 +93,6 @@ public class ProceedTransactionBehaviour extends Behaviour {
 
     private void getSellerFromProposeReply(ACLMessage reply) {
         if (reply.getPerformative() == ACLMessage.PROPOSE) {
-            //int price = Integer.parseInt(reply.getContent());
-            //TODO Gieda here
             seller = reply.getSender();
 
             Utils.log(agent.getLocalName(),"PROPOSE from seller" + reply.getSender().getLocalName());
