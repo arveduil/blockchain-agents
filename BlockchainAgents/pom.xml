@@ -11,10 +11,8 @@
         </repository>
 
         <repository>
-            <id>jfrog-snapshots</id>
-            <name>oss.jfrog.org</name>
-            <url>https://oss.jfrog.org/libs-snapshot/</url>
-            <snapshots><enabled>true</enabled></snapshots>
+            <id>bintray</id>
+            <url>http://dl.bintray.com/ethereum/maven</url>
         </repository>
     </repositories>
 
