@@ -1,21 +1,18 @@
 package blockchain.behaviours;
 
-import blockchain.agents.AgentWithWallet;
+import blockchain.agents.ClientAgent;
+import blockchain.currencies.Ethereum;
 import blockchain.utils.MessageContent;
 import blockchain.utils.Utils;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-import java.math.BigDecimal;
-
 public class SendOfferForSaleBehaviour extends CyclicBehaviour {
-    private BigDecimal amountToOffer;
-    private AgentWithWallet agentWithWallet;
+    private ClientAgent agentWithWallet;
 
-    public SendOfferForSaleBehaviour(AgentWithWallet a, BigDecimal amountToOffer) {
+    public SendOfferForSaleBehaviour(ClientAgent a) {
         super(a);
-        this.amountToOffer = amountToOffer;
         this.agentWithWallet = a;
     }
 
@@ -23,7 +20,6 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
         ACLMessage messageFromBuyer = getCallForProposalMessage();
 
         if (messageFromBuyer != null) {
-            //this.agentWithWallet.addBehaviour(new LoggingBehaviour(agentWithWallet,"Received message from buyer: " + messageFromBuyer.getSender()));
             Utils.log(agentWithWallet,"Received CFP message from buyer " + messageFromBuyer.getSender().getLocalName());
 
             handleMessageFromBuyer(messageFromBuyer);
@@ -39,7 +35,7 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
     }
 
     private void handleMessageFromBuyer(ACLMessage msg) {
-        BigDecimal amountRequested = new BigDecimal(msg.getContent());
+        Ethereum amountRequested = new Ethereum(msg.getContent());
         ACLMessage reply = msg.createReply();
 
         decorateReplyWithDecision(amountRequested, reply);
@@ -47,11 +43,10 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
         myAgent.send(reply);
     }
 
-    private void decorateReplyWithDecision(BigDecimal amountRequested, ACLMessage reply) {
+    private void decorateReplyWithDecision(Ethereum amountRequested, ACLMessage reply) {
         Utils.log(agentWithWallet,"Amount requested: " + amountRequested + " amount to offer " + agentWithWallet.getWalletState());
 
-        //TODO change condition
-        if (requestedAmountIsLessThanOffer(amountRequested)){
+        if (canAfford(amountRequested)){
             fillReplyWithPropose(reply);
         }
         else{
@@ -63,23 +58,15 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
         reply.setPerformative(ACLMessage.REFUSE);
         reply.setContent(MessageContent.NOT_ENOUGH_MONEY.toString());
         Utils.log(agentWithWallet,"Response REFUSE");
-
-        //this.agentWithWallet.addBehaviour(new LoggingBehaviour(agentWithWallet,"Response REFUSE"));
     }
 
     private void fillReplyWithPropose(ACLMessage reply) {
         reply.setPerformative(ACLMessage.PROPOSE);
         reply.setContent(String.valueOf(myAgent.getAID()));
-
         Utils.log(agentWithWallet,"Response PROPOSE");
     }
 
-    private boolean requestedAmountIsLessThanOffer(BigDecimal amountRequested){
-        return amountRequested.compareTo(amountToOffer) != 1;
-    }
-
-    //TODO add to condition whether or not make decision
-    private boolean agentHasNotEnoughMoneyInWalletToOffer(){
-        return agentWithWallet.getWalletState().compareTo(this.amountToOffer) == -1;
+    private boolean canAfford(Ethereum amountRequested){
+        return agentWithWallet.hasInWallet(amountRequested);
     }
 }
