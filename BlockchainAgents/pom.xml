@@ -4,6 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <repositories>
+        <repository>
+            <id>tilab</id>
+            <url>https://jade.tilab.com/maven/</url>
+        </repository>
+
+        <repository>
+            <id>bintray</id>
+            <url>http://dl.bintray.com/ethereum/maven</url>
+        </repository>
+    </repositories>
+
     <groupId>BlockchainAgents</groupId>
     <artifactId>BlockchainAgents</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -19,6 +31,20 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.tilab.jade</groupId>
+            <artifactId>jade</artifactId>
+            <version>4.5.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ethereum</groupId>
+            <artifactId>ethereumj-core</artifactId>
+            <version>1.12.0-RELEASE</version>
+        </dependency>
+    </dependencies>
 
 
 </project>
