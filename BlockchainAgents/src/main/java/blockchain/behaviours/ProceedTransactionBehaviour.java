@@ -9,13 +9,20 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.util.ArrayList;
+import java.util.Random;
+
+import static blockchain.behaviours.BuyerState.INIT;
+
 public class ProceedTransactionBehaviour extends Behaviour {
-    private int step = 0;
+    private BuyerState state = INIT;
     private AID[] agentsWithSellOffer;
     private Ethereum amountToBuy;
     private MessageTemplate mt;
-    private AID seller;
+    private AID sellerChoosen;
     private ClientAgent agent;
+    private int repliesCounter = 0;
+    private ArrayList sellersWhoRespondedWithProposal;
 
     public ProceedTransactionBehaviour(ClientAgent agent, Ethereum amountToBuy, AID[] agentsWithSellOffer) {
         super(agent);
@@ -23,50 +30,59 @@ public class ProceedTransactionBehaviour extends Behaviour {
         this.agent = agent;
         this.amountToBuy = amountToBuy;
         this.agentsWithSellOffer = agentsWithSellOffer;
+        this.sellersWhoRespondedWithProposal = new ArrayList();
     }
 
     @Override
     public void action() {
-        switch (step) {
-            case 0:
+        switch (state) {
+            case INIT:
                 ACLMessage cfp = createCfpMessageAsBuyOffer();
                 myAgent.send(cfp);
                 mt = MessageTemplate.and(MessageTemplate.MatchConversationId("blockchain"),
                         MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
-                step = 1;
+                state = BuyerState.COLLECTING_RESPONSES;
                 break;
-            case 1:
+            case COLLECTING_RESPONSES:
                 ACLMessage reply = myAgent.receive(mt);
                 if (reply != null) {
-
                     getSellerFromProposeReply(reply);
-
-                    step = 2;
                 } else {
                     block();
                 }
+
+                if(repliesCounter == agentsWithSellOffer.length){
+                    if(sellersWhoRespondedWithProposal.isEmpty()){
+                        state = BuyerState.END;
+                        break;
+                    } else {
+                        int sellerIndexChoosen = new Random().nextInt(sellersWhoRespondedWithProposal.size());
+                        sellerChoosen = (AID) sellersWhoRespondedWithProposal.get(sellerIndexChoosen);
+                        state = BuyerState.SENDING_ACCEPT_PROPOSE_TO_SELLER;
+                    }
+                }
                 break;
-            case 2:
+            case SENDING_ACCEPT_PROPOSE_TO_SELLER:
                 ACLMessage order = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
 
                 decorateAcceptProposalOrderAsTransactionConfirmation(order);
 
-                Utils.log(this.agent,"Send ACCEPT_PROPOSAL to " + seller.getLocalName());
+                Utils.log(this.agent,"Send ACCEPT_PROPOSAL to " + sellerChoosen.getName());
 
                 myAgent.send(order);
 
                 mt = MessageTemplate.and(MessageTemplate.MatchConversationId(MessageContent.TRANSACTION_CONFIRMATION.toString()),
                         MessageTemplate.MatchInReplyTo(order.getReplyWith()));
-                step = 3;
+
+                state = BuyerState.FINALIZING_TRANSACTION;
                 break;
-            case 3:
+            case FINALIZING_TRANSACTION:
                 //confirm transaction receive
                 //HERE RECEIVER ADD MONEY TO ACCOUNT
-                //
                 reply = myAgent.receive(mt);
                 if (reply != null) {
                     handleTransactionConfirmation(reply);
-                    step = 4;
+                    state = BuyerState.END;
                 }
                 else {
                     block();
@@ -92,17 +108,18 @@ public class ProceedTransactionBehaviour extends Behaviour {
     }
 
     private void getSellerFromProposeReply(ACLMessage reply) {
+        repliesCounter++;
         if (reply.getPerformative() == ACLMessage.PROPOSE) {
-            seller = reply.getSender();
+            sellersWhoRespondedWithProposal.add(reply.getSender());
 
-            Utils.log(agent.getLocalName(),"PROPOSE from seller" + reply.getSender().getLocalName());
+            Utils.log(agent.getLocalName(),"PROPOSE from seller" + reply.getSender().getName());
         }else{
-            Utils.log(agent.getLocalName(),"REFUSE from seller" + reply.getSender().getLocalName());
+            Utils.log(agent.getLocalName(),"REFUSE from seller" + reply.getSender().getName());
         }
     }
 
     private void decorateAcceptProposalOrderAsTransactionConfirmation(ACLMessage order) {
-        order.addReceiver(seller);
+        order.addReceiver(sellerChoosen);
         order.setContent(amountToBuy.toString());
         order.setConversationId(MessageContent.TRANSACTION_CONFIRMATION.toString());
         order.setReplyWith("order"+System.currentTimeMillis());
@@ -113,23 +130,23 @@ public class ProceedTransactionBehaviour extends Behaviour {
             succesfullyReceivedAmount(reply);
         }
         else {
-            Utils.log(agent.getLocalName(),"Transaction with " + reply.getSender().getLocalName() +" failed.");
+            Utils.log(agent.getLocalName(),"Transaction with " + reply.getSender().getName() +" failed.");
         }
     }
 
     private void succesfullyReceivedAmount(ACLMessage reply) {
         agent.addToWallet(amountToBuy);
-        Utils.log(this.agent,"Received" + amountToBuy + " from " + reply.getSender().getLocalName());
-        Utils.log(this.agent,"Transaction finished successfully " + reply.getSender().getLocalName());
+        Utils.log(this.agent,"Received" + amountToBuy + " from " + reply.getSender().getName());
+        Utils.log(this.agent,"Transaction finished successfully with" + reply.getSender().getName());
         Utils.logWalletState(this.agent);
     }
 
     @Override
         public boolean done() {
-            if (step == 2 && seller == null) {
-                Utils.log(this.agent,"Cannot find seller");
-            }
+//            if ( state == BuyerState.COLLECTING_RESPONSES && sellerChoosen == null) {
+//                Utils.log(this.agent,"Cannot find seller");
+//            }
 
-            return ((step == 2 && seller == null) || step == 4);
+            return (state == BuyerState.END);
         }
     }

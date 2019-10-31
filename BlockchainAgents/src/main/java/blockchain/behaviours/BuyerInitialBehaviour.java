@@ -2,6 +2,7 @@ package blockchain.behaviours;
 
 import blockchain.agents.ClientAgent;
 import blockchain.currencies.Ethereum;
+import blockchain.utils.RemoteConnectionUtils;
 import blockchain.utils.Utils;
 import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
@@ -18,33 +19,41 @@ public class BuyerInitialBehaviour extends TickerBehaviour {
 
     private ClientAgent clientAgent;
     private Ethereum desiredAmount;
-    private boolean finished = false;
+    private String hostOrRemoteDfAddress;
 
-    public BuyerInitialBehaviour(ClientAgent agentWithWallet, long period, Ethereum desiredAmount) {
+    public BuyerInitialBehaviour(ClientAgent agentWithWallet, long period, Ethereum desiredAmount, String hostOrRemoteDfAddress) {
         super(agentWithWallet, period);
 
         this.clientAgent = agentWithWallet;
         this.desiredAmount = desiredAmount;
+        this.hostOrRemoteDfAddress = hostOrRemoteDfAddress;
         LOGGER.addHandler(new ConsoleHandler());
     }
 
     protected void onTick()
     {
-        Utils.log(clientAgent.getLocalName(),"Buyers looks for " + desiredAmount);
+        Utils.log(clientAgent.getName(),"Buyers looks for " + desiredAmount);
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
         sd.setType("blockchain");
         template.addServices(sd);
         try
         {
-            DFAgentDescription[] result = DFService.search(myAgent, template);
+            DFAgentDescription[] result;
+            if(clientAgent.isInHostPlatform()){
+               result  = DFService.search(myAgent, template);
+            }else {
+                AID remoteDf = RemoteConnectionUtils.getRemoteDfAgent(clientAgent.getHostIp());
+                result = DFService.search(myAgent, remoteDf,template);
+            }
+
             StringBuilder logMessagaBuilder = new StringBuilder("Found " + result.length + " sellers: ");
             AID[] sellerAgents = new AID[result.length];
             for (int i = 0; i < result.length; ++i)
             {
                 sellerAgents[i] = result[i].getName();
                 logMessagaBuilder.append(" ");
-                logMessagaBuilder.append(sellerAgents[i].getLocalName());
+                logMessagaBuilder.append(sellerAgents[i].getName());
             }
             Utils.log(clientAgent.getLocalName(),logMessagaBuilder.toString());
 
