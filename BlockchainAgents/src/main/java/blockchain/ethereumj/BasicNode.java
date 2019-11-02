@@ -1,15 +1,23 @@
 package blockchain.ethereumj;
 
 import com.google.common.base.Joiner;
+import org.ethereum.core.AccountState;
+import org.ethereum.core.Transaction;
+import org.ethereum.crypto.ECKey;
 import org.ethereum.net.rlpx.discover.NodeManager;
 import org.ethereum.net.rlpx.discover.table.NodeEntry;
 import org.ethereum.net.server.Channel;
 import org.ethereum.net.server.ChannelManager;
 import org.ethereum.samples.BasicSample;
+import org.ethereum.util.ByteUtil;
+import org.ethereum.util.blockchain.EtherUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class BasicNode extends BasicSample {
     @Autowired
@@ -18,8 +26,19 @@ public class BasicNode extends BasicSample {
     @Autowired
     NodeManager nodeManager;
 
+    private byte[] privateKey;
+    private AccountState account;
+    private final List<byte[]> otherNodesAddresses;
+
     public BasicNode(String nodeName) {
        super(nodeName);
+        otherNodesAddresses = new ArrayList<>();
+    }
+
+    @PostConstruct
+    public void init() throws Exception {
+        privateKey = config.getMyKey().getPrivKeyBytes();
+        account = new AccountState(config);
     }
 
     {
@@ -60,5 +79,31 @@ public class BasicNode extends BasicSample {
     @Override
     public void onSyncDone() {
         logger.info("onSyncDone");
+    }
+
+    public BigInteger getMyCash() {
+        return account.getBalance();
+    }
+
+    public byte[] getMyMyAddress() {
+        return config.getMyKey().getAddress();
+    }
+
+    public void sendTransaction(byte[] receiverAddress, long cashAmount, byte[] data) {
+        byte[] fromAddress = ECKey.fromPrivate(privateKey).getAddress();
+        BigInteger nonce = ethereum.getRepository().getNonce(fromAddress);
+        Transaction tx = new Transaction(
+                ByteUtil.bigIntegerToBytes(nonce),
+                ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
+                ByteUtil.longToBytesNoLeadZeroes(20000),
+                receiverAddress,
+                ByteUtil.bigIntegerToBytes(EtherUtil.convert(cashAmount, EtherUtil.Unit.WEI)),
+                data,
+                ethereum.getChainIdForNextBlock()
+        );
+
+        tx.sign(ECKey.fromPrivate(privateKey));
+        logger.info("<=== Sending transaction: " + tx);
+        ethereum.submitTransaction(tx);
     }
 }

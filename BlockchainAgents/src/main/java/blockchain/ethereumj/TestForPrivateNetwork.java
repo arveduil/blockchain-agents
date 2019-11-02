@@ -14,8 +14,8 @@ public class TestForPrivateNetwork {
         BasicSample.sLogger.info("Starting regular instance 1!");
         EthereumFactory.createEthereum(Node1Config.class);
 
-        BasicSample.sLogger.info("Starting regular instance 2!");
-        EthereumFactory.createEthereum(Node2Config.class);
+        BasicSample.sLogger.info("Starting miner instance!");
+        EthereumFactory.createEthereum(MinerNodeConfig.class);
     }
 
 
@@ -47,8 +47,8 @@ public class TestForPrivateNetwork {
         }
     }
 
-    private static class Node2Config extends RegularConfig{
-        public Node2Config() {
+    private static class MinerNodeConfig extends MinerConfig {
+        public MinerNodeConfig() {
             super(2, "127.0.0.1:20000");
         }
         @Bean

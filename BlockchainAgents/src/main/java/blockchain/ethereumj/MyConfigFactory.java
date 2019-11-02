@@ -1,6 +1,7 @@
 package blockchain.ethereumj;
 
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValue;
 import com.typesafe.config.ConfigValueFactory;
 import org.ethereum.crypto.ECKey;
@@ -8,10 +9,10 @@ import org.spongycastle.util.encoders.Hex;
 
 import java.util.Arrays;
 
-public class ConfigFactory {
+public class MyConfigFactory {
 
     public static Config getConfig(int index, String discoveryNode) {
-        return com.typesafe.config.ConfigFactory.empty()
+        return ConfigFactory.empty()
                 .withValue("peer.discovery.enabled", value(true))
                 .withValue("peer.discovery.external.ip", value("127.0.0.1"))
                 .withValue("peer.discovery.bind.ip", value("127.0.0.1"))
@@ -25,6 +26,13 @@ public class ConfigFactory {
                 .withValue("genesis", value("sample-genesis.json"))
                 .withValue("database.dir", value("sampleDB-" + index))
                 .withValue("peer.discovery.ip.list", value(discoveryNode != null ? Arrays.asList(discoveryNode) : Arrays.asList()));
+    }
+
+    public static Config getMinerConfig(int index, String discoveryNode) {
+        return getConfig(index, discoveryNode)
+                .withValue("mine.extraDataHex", value("ccccccc"))
+                .withValue("mine.cpuMineThreads", value(1))
+                .withValue("cache.flush.blocks", value(1));
     }
 
     private static ConfigValue value(Object value) {
