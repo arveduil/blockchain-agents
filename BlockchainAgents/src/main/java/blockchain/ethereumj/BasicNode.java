@@ -15,9 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class BasicNode extends BasicSample {
     @Autowired
@@ -29,10 +28,12 @@ public class BasicNode extends BasicSample {
     private byte[] privateKey;
     private AccountState account;
     private final List<byte[]> otherNodesAddresses;
+    private final Queue<Transaction> submittedTransactions;
 
     public BasicNode(String nodeName) {
        super(nodeName);
         otherNodesAddresses = new ArrayList<>();
+        submittedTransactions = new ConcurrentLinkedQueue<>();
     }
 
     @PostConstruct
@@ -81,14 +82,6 @@ public class BasicNode extends BasicSample {
         logger.info("onSyncDone");
     }
 
-    public BigInteger getMyCash() {
-        return account.getBalance();
-    }
-
-    public byte[] getMyMyAddress() {
-        return config.getMyKey().getAddress();
-    }
-
     public void sendTransaction(byte[] receiverAddress, long cashAmount, byte[] data) {
         byte[] fromAddress = ECKey.fromPrivate(privateKey).getAddress();
         BigInteger nonce = ethereum.getRepository().getNonce(fromAddress);
@@ -104,6 +97,25 @@ public class BasicNode extends BasicSample {
 
         tx.sign(ECKey.fromPrivate(privateKey));
         logger.info("<=== Sending transaction: " + tx);
+        submittedTransactions.add(tx);
         ethereum.submitTransaction(tx);
+    }
+
+    public BigInteger getBalance() {
+        return account.getBalance();
+    }
+
+    public byte[] getAddress() {
+        return config.getMyKey().getAddress();
+    }
+
+
+    // getters for bigger objects
+    public AccountState getAccount() {
+        return account;
+    }
+
+    public ECKey getECKey() {
+        return config.getMyKey();
     }
 }
