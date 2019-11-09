@@ -19,14 +19,12 @@ public class BuyerInitialBehaviour extends TickerBehaviour {
 
     private ClientAgent clientAgent;
     private Ethereum desiredAmount;
-    private String hostOrRemoteDfAddress;
 
-    public BuyerInitialBehaviour(ClientAgent agentWithWallet, long period, Ethereum desiredAmount, String hostOrRemoteDfAddress) {
+    public BuyerInitialBehaviour(ClientAgent agentWithWallet, long period, Ethereum desiredAmount) {
         super(agentWithWallet, period);
 
         this.clientAgent = agentWithWallet;
         this.desiredAmount = desiredAmount;
-        this.hostOrRemoteDfAddress = hostOrRemoteDfAddress;
         LOGGER.addHandler(new ConsoleHandler());
     }
 
@@ -40,12 +38,8 @@ public class BuyerInitialBehaviour extends TickerBehaviour {
         try
         {
             DFAgentDescription[] result;
-            if(clientAgent.isInHostPlatform()){
-               result  = DFService.search(myAgent, template);
-            }else {
-                AID remoteDf = RemoteConnectionUtils.getRemoteDfAgent(clientAgent.getHostIp());
-                result = DFService.search(myAgent, remoteDf,template);
-            }
+            AID dfAgent = RemoteConnectionUtils.getRemoteDfAgent(clientAgent.getDfAgentIpAdress());
+            result = DFService.search(myAgent, dfAgent,template);
 
             StringBuilder logMessagaBuilder = new StringBuilder("Found " + result.length + " sellers: ");
             AID[] sellerAgents = new AID[result.length];

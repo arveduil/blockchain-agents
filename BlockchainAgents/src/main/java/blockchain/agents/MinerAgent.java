@@ -4,6 +4,8 @@ import blockchain.behaviours.MiningBehaviour;
 import blockchain.behaviours.PurchaseSellBehaviour;
 import blockchain.behaviours.SendOfferForSaleBehaviour;
 import blockchain.currencies.Ethereum;
+import blockchain.utils.RemoteConnectionUtils;
+import jade.core.AID;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -23,15 +25,17 @@ public class MinerAgent extends ClientAgent {
         BigDecimal sellOfferAmount = new BigDecimal(100);
         Object[] args = getArguments();
 
+        AID dfAgent = RemoteConnectionUtils.getRemoteDfAgent(super.getDfAgentIpAdress());
+
         //todo remove double registry after connecting EthereumJ
-        DFAgentDescription dfd = new DFAgentDescription();
-        dfd.setName(getAID());
+        DFAgentDescription dfAgentDescription = new DFAgentDescription();
+        dfAgentDescription.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
         sd.setType("blockchain");
         sd.setName(getAID().getName() );
-        dfd.addServices(sd);
+        dfAgentDescription.addServices(sd);
         try {
-            DFService.register(this, dfd);
+            DFService.register(this, dfAgent, dfAgentDescription);
         } catch (FIPAException fe) {
             fe.printStackTrace();
         }

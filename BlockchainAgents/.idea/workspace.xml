@@ -2,16 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82fb2c8c-c21f-49f4-b91b-687c704075fd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerState.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/ConstValues.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/RemoteConnectionUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/agents/LoggerAgent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/ClientRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/ClientType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/TransactionRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/Config.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/LoggerUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/TransactionDetails.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/APDescription.txt" beforeDir="false" afterPath="$PROJECT_DIR$/APDescription.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MTPs-Main-Container.txt" beforeDir="false" afterPath="$PROJECT_DIR$/MTPs-Main-Container.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/agents/MinerAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/agents/MinerAgent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Currency.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Currency.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Wallet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Wallet.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -67,7 +74,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1565892405945" />
-    <property name="last_opened_file_path" value="$USER_HOME$/reactive-scala-labs-templates" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -97,7 +104,7 @@
     <configuration name="2miners2client" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="jade.Boot" />
       <module name="BlockchainAgents" />
-      <option name="PROGRAM_PARAMETERS" value="-gui miner1:blockchain.agents.MinerAgent(0,0);miner2:blockchain.agents.MinerAgent(0,0);client1:blockchain.agents.ClientAgent(5000,300);client2:blockchain.agents.ClientAgent(6000,400);sniffer:jade.tools.sniffer.Sniffer(s)" />
+      <option name="PROGRAM_PARAMETERS" value="-gui miner1:blockchain.agents.MinerAgent(0,0,Miner);miner2:blockchain.agents.MinerAgent(0,0,Miner);client1:blockchain.agents.ClientAgent(5000,300,Client);client2:blockchain.agents.ClientAgent(6000,400,Client);sniffer:jade.tools.sniffer.Sniffer(s)" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -129,6 +136,13 @@
       <workItem from="1572082706579" duration="12598000" />
       <workItem from="1572300629836" duration="1424000" />
       <workItem from="1572469982898" duration="8887000" />
+      <workItem from="1572630919070" duration="321000" />
+      <workItem from="1572634966394" duration="3275000" />
+      <workItem from="1572817808765" duration="599000" />
+      <workItem from="1573066447526" duration="393000" />
+      <workItem from="1573136460947" duration="164000" />
+      <workItem from="1573296361945" duration="9160000" />
+      <workItem from="1573309485902" duration="8549000" />
     </task>
     <servers />
   </component>
@@ -147,5 +161,36 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/blockchain/agents/LoggerAgent.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/blockchain/agents/LoggerAgent.java</url>
+          <line>60</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/blockchain/agents/LoggerAgent.java</url>
+          <line>48</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java</url>
+          <line>127</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="json" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

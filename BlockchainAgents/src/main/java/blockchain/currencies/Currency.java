@@ -7,8 +7,6 @@ import java.math.BigInteger;
 import java.math.MathContext;
 
 public abstract class Currency extends BigDecimal {
-    protected String currencyCode;
-
     public Currency(char[] in, int offset, int len) {
         super(in, offset, len);
     }
