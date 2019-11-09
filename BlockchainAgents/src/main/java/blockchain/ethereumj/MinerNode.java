@@ -1,6 +1,9 @@
 package blockchain.ethereumj;
 
 import org.ethereum.core.Block;
+import org.ethereum.core.TransactionReceipt;
+import org.ethereum.db.ByteArrayWrapper;
+import org.ethereum.listener.EthereumListenerAdapter;
 import org.ethereum.mine.EthashListener;
 
 import java.util.Queue;
@@ -17,6 +20,16 @@ public class MinerNode extends BasicNode implements EthashListener {
 
     @Override
     public void run() {
+        ethereum.addListener(new EthereumListenerAdapter() {
+            @Override
+            public void onPendingTransactionUpdate(TransactionReceipt txReceipt, PendingTransactionState state, Block block) {
+                ByteArrayWrapper txHashW = new ByteArrayWrapper(txReceipt.getTransaction().getHash());
+                // Catching transaction errors
+                if (txWaiters.containsKey(txHashW) && !txReceipt.isSuccessful()) {
+                    txWaiters.put(txHashW, txReceipt);
+                }
+            }
+        });
         ethereum.getBlockMiner().addListener(this);
         ethereum.getBlockMiner().startMining();
     }
@@ -50,6 +63,7 @@ public class MinerNode extends BasicNode implements EthashListener {
     @Override
     public void blockMined(Block block) {
         logger.info("Block mined! : \n" + block);
+        System.out.println("Balance: " + ethereum.getRepository().getBalance(getAddress()));
         minedBlocks.add(block);
     }
 

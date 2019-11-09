@@ -1,5 +1,6 @@
-package blockchain.ethereumj;
+package blockchain.ethereumj.config;
 
+import blockchain.ethereumj.BasicNode;
 import org.ethereum.config.SystemProperties;
 import org.ethereum.samples.BasicSample;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +17,7 @@ public class RegularConfig {
 
     @Bean
     public BasicSample node() {
-        return new BasicNode("sampleNode-" + nodeIndex);
+        return new BasicNode("basicNode-" + nodeIndex);
     }
 
     @Bean

@@ -1,17 +1,20 @@
-package blockchain.ethereumj;
+package blockchain.ethereumj.config;
 
+import blockchain.ethereumj.MinerNode;
 import org.ethereum.config.SystemProperties;
 import org.ethereum.samples.BasicSample;
 import org.springframework.context.annotation.Bean;
 
 public class MinerConfig {
+
     private final String discoveryNode;
-
     private final int nodeIndex;
+    private final String extraData;
 
-    public MinerConfig(int nodeIndex, String discoveryNode) {
+    public MinerConfig(int nodeIndex, String discoveryNode, String extraData) {
         this.nodeIndex = nodeIndex;
         this.discoveryNode = discoveryNode;
+        this.extraData = extraData;
     }
 
     @Bean
@@ -21,6 +24,6 @@ public class MinerConfig {
 
     @Bean
     public SystemProperties systemProperties() {
-        return new SystemProperties(MyConfigFactory.getConfig(nodeIndex, discoveryNode));
+        return new SystemProperties(MyConfigFactory.getMinerConfig(nodeIndex, discoveryNode, extraData));
     }
 }

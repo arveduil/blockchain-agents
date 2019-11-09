@@ -1,9 +1,12 @@
 package blockchain.ethereumj;
 
 import com.google.common.base.Joiner;
-import org.ethereum.core.AccountState;
+import org.ethereum.core.Block;
 import org.ethereum.core.Transaction;
+import org.ethereum.core.TransactionReceipt;
 import org.ethereum.crypto.ECKey;
+import org.ethereum.db.ByteArrayWrapper;
+import org.ethereum.listener.EthereumListenerAdapter;
 import org.ethereum.net.rlpx.discover.NodeManager;
 import org.ethereum.net.rlpx.discover.table.NodeEntry;
 import org.ethereum.net.server.Channel;
@@ -11,6 +14,7 @@ import org.ethereum.net.server.ChannelManager;
 import org.ethereum.samples.BasicSample;
 import org.ethereum.util.ByteUtil;
 import org.ethereum.util.blockchain.EtherUtil;
+import org.spongycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -25,21 +29,25 @@ public class BasicNode extends BasicSample {
     @Autowired
     NodeManager nodeManager;
 
-    private byte[] privateKey;
-    private AccountState account;
-    private final List<byte[]> otherNodesAddresses;
+    private int balance = 0;
+    protected final List<String> otherNodesAddresses = new ArrayList<>();
     private final Queue<Transaction> submittedTransactions;
+
+    private final String nodeName;
+
+    protected Map<ByteArrayWrapper, TransactionReceipt> txWaiters = Collections.synchronizedMap(new HashMap<>());
 
     public BasicNode(String nodeName) {
        super(nodeName);
-        otherNodesAddresses = new ArrayList<>();
-        submittedTransactions = new ConcurrentLinkedQueue<>();
+       this.nodeName = nodeName;
+       submittedTransactions = new ConcurrentLinkedQueue<>();
     }
 
     @PostConstruct
     public void init() throws Exception {
-        privateKey = config.getMyKey().getPrivKeyBytes();
-        account = new AccountState(config);
+        System.out.println(nodeName);
+        System.out.println("Public Key: " + Hex.toHexString(getECKey().getAddress()));
+        System.out.println("Private Key: " + getECKey().getPrivKey());
     }
 
     {
@@ -60,7 +68,9 @@ public class BasicNode extends BasicSample {
                             final ArrayList<String> nodesString = new ArrayList<>();
                             for (NodeEntry node: nodes) {
                                 nodesString.add(node.getNode().getHost() + ":" + node.getNode().getPort() + "@" + node.getNode().getHexId().substring(0, 6) );
+
                             }
+
 
                             logger.info("channelManager.getActivePeers() " + activePeers.size() + " " + Joiner.on(", ").join(ports));
                             logger.info("nodeManager.getTable().getAllNodes() " + nodesString.size() + " " + Joiner.on(", ").join(nodesString));
@@ -77,43 +87,71 @@ public class BasicNode extends BasicSample {
         }).start();
     }
 
+    private void addNodeAddress(String hexId) {
+        if (!otherNodesAddresses.contains(hexId)) {
+            otherNodesAddresses.add(hexId);
+        }
+    }
+
     @Override
     public void onSyncDone() {
+        ethereum.addListener(new EthereumListenerAdapter() {
+            @Override
+            public void onBlock(Block block, List<TransactionReceipt> receipts) {
+                BasicNode.this.onBlock(block, receipts);
+                logger.info("BALANCE: " + ethereum.getRepository().getBalance(getAddress()));
+            }
+        });
         logger.info("onSyncDone");
     }
 
-    public void sendTransaction(byte[] receiverAddress, long cashAmount, byte[] data) {
-        byte[] fromAddress = ECKey.fromPrivate(privateKey).getAddress();
-        BigInteger nonce = ethereum.getRepository().getNonce(fromAddress);
+
+    private void onBlock(Block block, List<TransactionReceipt> receipts) {
+        for (TransactionReceipt receipt : receipts) {
+            ByteArrayWrapper txHashW = new ByteArrayWrapper(receipt.getTransaction().getHash());
+            if (txWaiters.containsKey(txHashW)) {
+                txWaiters.put(txHashW, receipt);
+                synchronized (this) {
+                    notifyAll();
+                }
+            }
+        }
+    }
+
+    public void sendTransaction(byte[] receiveAddress, int cashAmount, byte[] data) {
+        BigInteger nounce = ethereum.getRepository().getNonce(getECKey().getAddress());
         Transaction tx = new Transaction(
-                ByteUtil.bigIntegerToBytes(nonce),
+                ByteUtil.bigIntegerToBytes(nounce),
                 ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
-                ByteUtil.longToBytesNoLeadZeroes(20000),
-                receiverAddress,
-                ByteUtil.bigIntegerToBytes(EtherUtil.convert(cashAmount, EtherUtil.Unit.WEI)),
+                ByteUtil.longToBytesNoLeadZeroes(200000),
+                receiveAddress,
+                ByteUtil.bigIntegerToBytes(EtherUtil.convert(cashAmount, EtherUtil.Unit.WEI)),  // Use EtherUtil.convert for easy value unit conversion
                 data,
                 ethereum.getChainIdForNextBlock()
         );
 
-        tx.sign(ECKey.fromPrivate(privateKey));
+        tx.sign(getECKey());
         logger.info("<=== Sending transaction: " + tx);
-        submittedTransactions.add(tx);
         ethereum.submitTransaction(tx);
+
+        submittedTransactions.add(tx);
     }
 
-    public BigInteger getBalance() {
-        return account.getBalance();
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int newBalance) {
+        this.balance = newBalance;
     }
 
     public byte[] getAddress() {
         return config.getMyKey().getAddress();
     }
 
-
-    // getters for bigger objects
-    public AccountState getAccount() {
-        return account;
-    }
+    //public void addNewAddress(byte[] addr) {
+    //    otherNodesAddresses.add(addr);
+    //}
 
     public ECKey getECKey() {
         return config.getMyKey();
