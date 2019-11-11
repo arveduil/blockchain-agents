@@ -136,6 +136,7 @@ public class ProceedTransactionBehaviour extends Behaviour {
 
     private void succesfullyReceivedAmount(ACLMessage reply) {
         agent.addToWallet(amountToBuy);
+        agent.logTransaction(agent.getName(), reply.getSender().getName());
         Utils.log(this.agent,"Received" + amountToBuy + " from " + reply.getSender().getName());
         Utils.log(this.agent,"Transaction finished successfully with" + reply.getSender().getName());
         Utils.logWalletState(this.agent);

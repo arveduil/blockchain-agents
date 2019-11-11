@@ -5,6 +5,7 @@ import blockchain.currencies.Ethereum;
 import blockchain.currencies.Wallet;
 import blockchain.dto.ClientRequestDto;
 import blockchain.dto.ClientType;
+import blockchain.dto.TransactionRequestDto;
 import blockchain.utils.Config;
 import blockchain.utils.Utils;
 import com.google.gson.Gson;
@@ -29,7 +30,8 @@ public class ClientAgent extends Agent {
     protected ClientType clientType;
     private String  serverAddress;
     private String addBlockPath = "api/data/add/block";
-    private String clientRequestPath = "api/data/add/client";
+    private String addClientRequestPath = "api/data/add/client";
+    private String addTransactionRequestPath = "api/data/add/transaction";
 
     protected void setup() {
         Utils.log(getAID().getLocalName(), " is ready");
@@ -91,7 +93,7 @@ public class ClientAgent extends Agent {
         ClientRequestDto requestDto = new ClientRequestDto();
         requestDto.MinedBlocksHashes = new LinkedList<>();
         requestDto.TransactionsHashes = new LinkedList<>();
-        requestDto.Hash = wallet.getWalletHash();
+        requestDto.Hash = this.getName();
         requestDto.Amount = (BigDecimal) wallet.getCurrentAmount();
 
         requestDto.StartDate =  new Date(System.currentTimeMillis());
@@ -101,27 +103,15 @@ public class ClientAgent extends Agent {
         //requestDto.MinedBlocksHashes.add("MINED_BLOCK_HASH");
         requestDto.Type = clientType;
         String json = gson.toJson(requestDto);
-        sendRequestToServer(json,clientRequestPath);
+        sendRequestToServer(json,addClientRequestPath);
     }
 
-//    public void logCreatingTransaction(String transactionHash,){
-//        TransactionRequestDto requestDto = new TransactionRequestDto();
-//        requestDto.TransactionDate = new Date(System.currentTimeMillis());
-//        requestDto.TransactionsHashes = new LinkedList<>();
-//        requestDto.Hash = wallet.getWalletHash();
-//        requestDto.Amount = (BigDecimal) wallet.getCurrentAmount();
-//
-//        requestDto.StartDate =  new Date(System.currentTimeMillis());
-//        requestDto.TransactionsHashes= new LinkedList<>();
-//        //requestDto.TransactionsHashes.add("TRANSACTIONHASH");
-//        requestDto.MinedBlocksHashes= new LinkedList<>();
-//        //requestDto.MinedBlocksHashes.add("MINED_BLOCK_HASH");
-//        requestDto.Type = clientType;
-//
-//        Gson gson = new Gson();
-//        String json = gson.toJson(requestDto);
-//        sendRequestToServer(json,clientRequestPath);
-//    }
+    public void logTransaction(String source, String destinantion){
+        TransactionRequestDto requestDto = TransactionRequestDto.getMock(source, destinantion);
+        Gson gson = new Gson();
+        String json = gson.toJson(requestDto);
+        sendRequestToServer(json,addTransactionRequestPath);
+    }
 
     public void sendRequestToServer(String json, String path){
         try {

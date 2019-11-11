@@ -1,24 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="82fb2c8c-c21f-49f4-b91b-687c704075fd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/agents/LoggerAgent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/ClientRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/ClientType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/TransactionRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/Config.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/LoggerUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/TransactionDetails.java" afterDir="false" />
+    <list default="true" id="82fb2c8c-c21f-49f4-b91b-687c704075fd" name="Default Changelist" comment="Added sending logs to server. Added config file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/APDescription.txt" beforeDir="false" afterPath="$PROJECT_DIR$/APDescription.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MTPs-Main-Container.txt" beforeDir="false" afterPath="$PROJECT_DIR$/MTPs-Main-Container.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/agents/MinerAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/agents/MinerAgent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Currency.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Currency.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Wallet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Wallet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/dto/TransactionRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/TransactionRequestDto.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -142,8 +131,18 @@
       <workItem from="1573066447526" duration="393000" />
       <workItem from="1573136460947" duration="164000" />
       <workItem from="1573296361945" duration="9160000" />
-      <workItem from="1573309485902" duration="8549000" />
+      <workItem from="1573309485902" duration="9429000" />
+      <workItem from="1573319334952" duration="980000" />
+      <workItem from="1573471122940" duration="244000" />
     </task>
+    <task id="LOCAL-00001" summary="Added sending logs to server. Added config file">
+      <created>1573318340800</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1573318340800</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -162,6 +161,10 @@
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added sending logs to server. Added config file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added sending logs to server. Added config file" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
@@ -179,11 +182,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/blockchain/agents/LoggerAgent.java</url>
           <line>48</line>
           <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java</url>
-          <line>127</line>
-          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
