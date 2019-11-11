@@ -7,6 +7,8 @@ import blockchain.dto.ClientRequestDto;
 import blockchain.dto.ClientType;
 import blockchain.dto.TransactionRequestDto;
 import blockchain.utils.Config;
+import blockchain.utils.RemoteConnectionHandler;
+import blockchain.utils.RequestType;
 import blockchain.utils.Utils;
 import com.google.gson.Gson;
 import jade.core.Agent;
@@ -14,10 +16,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -26,15 +28,15 @@ public class ClientAgent extends Agent {
     private Wallet wallet = new Wallet();
     private int intervalMiliseconds = 0;
     private Ethereum amountToGet = new Ethereum(0);
-    private String  dfAgentIpAddress;
     protected ClientType clientType;
-    private String  serverAddress;
     private String addBlockPath = "api/data/add/block";
     private String addClientRequestPath = "api/data/add/client";
     private String addTransactionRequestPath = "api/data/add/transaction";
+    protected RemoteConnectionHandler remoteConnectionHandler;
 
     protected void setup() {
         Utils.log(getAID().getLocalName(), " is ready");
+        remoteConnectionHandler = RemoteConnectionHandler.getInstance();
         Object[] args = getArguments();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.json");
 
@@ -44,8 +46,6 @@ public class ClientAgent extends Agent {
             JSONParser jsonParser = new JSONParser();
             JSONObject configJson =  (JSONObject) jsonParser.parse(reader);
             Config config = gson.fromJson( configJson.toString(), Config.class);
-            this.dfAgentIpAddress = config.dfHostAddressIp;
-            this.serverAddress = config.serverAddressIpPort;
         } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
@@ -85,10 +85,6 @@ public class ClientAgent extends Agent {
        return wallet.contains(amount);
     }
 
-    public String getDfAgentIpAdress(){
-        return dfAgentIpAddress;
-    }
-
     public void logAddingClient(){
         ClientRequestDto requestDto = new ClientRequestDto();
         requestDto.MinedBlocksHashes = new LinkedList<>();
@@ -103,41 +99,16 @@ public class ClientAgent extends Agent {
         //requestDto.MinedBlocksHashes.add("MINED_BLOCK_HASH");
         requestDto.Type = clientType;
         String json = gson.toJson(requestDto);
-        sendRequestToServer(json,addClientRequestPath);
+        String path = remoteConnectionHandler.getServerAddress() + "/" + addClientRequestPath;
+
+        RemoteConnectionHandler.sendRequestToServer(path,json,RequestType.POST);
     }
 
     public void logTransaction(String source, String destinantion){
         TransactionRequestDto requestDto = TransactionRequestDto.getMock(source, destinantion);
         Gson gson = new Gson();
         String json = gson.toJson(requestDto);
-        sendRequestToServer(json,addTransactionRequestPath);
-    }
-
-    public void sendRequestToServer(String json, String path){
-        try {
-            URL url = new URL(serverAddress +"/"+ path);
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json; utf-8");
-            con.setRequestProperty("Accept", "application/json");
-            con.setDoOutput(true);
-            try(OutputStream os = con.getOutputStream()) {
-                byte[] input = json.getBytes("utf-8");
-                os.write(input, 0, input.length);
-            }
-            con.connect();
-
-            try(BufferedReader br = new BufferedReader(
-                    new InputStreamReader(con.getInputStream(), "utf-8"))) {
-                StringBuilder response = new StringBuilder();
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-                //System.out.println(response.toString());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String path = remoteConnectionHandler.getServerAddress()  + "/" + addTransactionRequestPath;
+        RemoteConnectionHandler.sendRequestToServer(path,json,RequestType.POST);
     }
 }

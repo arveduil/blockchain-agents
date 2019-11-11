@@ -2,7 +2,7 @@ package blockchain.behaviours;
 
 import blockchain.agents.ClientAgent;
 import blockchain.currencies.Ethereum;
-import blockchain.utils.RemoteConnectionUtils;
+import blockchain.utils.RemoteConnectionHandler;
 import blockchain.utils.Utils;
 import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
@@ -38,7 +38,7 @@ public class BuyerInitialBehaviour extends TickerBehaviour {
         try
         {
             DFAgentDescription[] result;
-            AID dfAgent = RemoteConnectionUtils.getRemoteDfAgent(clientAgent.getDfAgentIpAdress());
+            AID dfAgent = RemoteConnectionHandler.getInstance().getRemoteDfAgent();
             result = DFService.search(myAgent, dfAgent,template);
 
             StringBuilder logMessagaBuilder = new StringBuilder("Found " + result.length + " sellers: ");

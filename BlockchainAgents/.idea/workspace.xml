@@ -2,12 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82fb2c8c-c21f-49f4-b91b-687c704075fd" name="Default Changelist" comment="Added sending logs to server. Added config file">
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/RemoteConnectionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/RequestType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/APDescription.txt" beforeDir="false" afterPath="$PROJECT_DIR$/APDescription.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/dto/TransactionRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/TransactionRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/agents/MinerAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/agents/MinerAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/utils/RemoteConnectionUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/BlockchainAgents.kotlin_module" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,8 +42,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -107,6 +111,16 @@
       </map>
     </option>
   </component>
+  <component name="ServiceViewManager">
+    <option name="allServicesViewState">
+      <serviceView>
+        <treeState>
+          <expand />
+          <select />
+        </treeState>
+      </serviceView>
+    </option>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -134,6 +148,7 @@
       <workItem from="1573309485902" duration="9429000" />
       <workItem from="1573319334952" duration="980000" />
       <workItem from="1573471122940" duration="244000" />
+      <workItem from="1573481361024" duration="4752000" />
     </task>
     <task id="LOCAL-00001" summary="Added sending logs to server. Added config file">
       <created>1573318340800</created>
@@ -182,6 +197,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/blockchain/agents/LoggerAgent.java</url>
           <line>48</line>
           <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/blockchain/utils/RemoteConnectionHandler.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
