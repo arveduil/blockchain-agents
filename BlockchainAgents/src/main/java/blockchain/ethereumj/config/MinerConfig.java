@@ -10,20 +10,22 @@ public class MinerConfig {
     private final String discoveryNode;
     private final int nodeIndex;
     private final String extraData;
+    private final String nodeName;
 
-    public MinerConfig(int nodeIndex, String discoveryNode, String extraData) {
+    public MinerConfig(int nodeIndex, String nodeName, String discoveryNode, String extraData) {
         this.nodeIndex = nodeIndex;
+        this.nodeName = nodeName;
         this.discoveryNode = discoveryNode;
         this.extraData = extraData;
     }
 
     @Bean
     public BasicSample node() {
-        return new MinerNode("minerNode-" + nodeIndex);
+        return new MinerNode(nodeName, nodeIndex);
     }
 
     @Bean
     public SystemProperties systemProperties() {
-        return new SystemProperties(MyConfigFactory.getMinerConfig(nodeIndex, discoveryNode, extraData));
+        return new SystemProperties(MyConfigFactory.getMinerConfig(nodeIndex, nodeName, discoveryNode, extraData));
     }
 }

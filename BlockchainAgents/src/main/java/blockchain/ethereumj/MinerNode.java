@@ -13,8 +13,8 @@ public class MinerNode extends BasicNode implements EthashListener {
 
     private final Queue<Block> minedBlocks;
 
-    public MinerNode(String nodeName) {
-        super(nodeName);
+    public MinerNode(String nodeName, int nodeIndex) {
+        super(nodeName, nodeIndex);
         minedBlocks = new ConcurrentLinkedQueue<>();
     }
 

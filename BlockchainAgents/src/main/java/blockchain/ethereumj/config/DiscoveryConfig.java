@@ -1,25 +1,27 @@
 package blockchain.ethereumj.config;
 
+import blockchain.ethereumj.BasicNode;
 import blockchain.ethereumj.DiscoveryNode;
 import org.ethereum.config.SystemProperties;
-import org.ethereum.samples.BasicSample;
 import org.springframework.context.annotation.Bean;
 
 public class DiscoveryConfig {
 
     private final int nodeIndex;
+    private final String nodeName;
 
-    public DiscoveryConfig(int index) {
+    public DiscoveryConfig(int index, String nodeName) {
         this.nodeIndex = index;
+        this.nodeName = nodeName;
     }
 
     @Bean
-    public BasicSample node() {
-        return new DiscoveryNode("discoveryNode-" + nodeIndex);
+    public BasicNode node() {
+        return new DiscoveryNode(nodeName, nodeIndex);
     }
 
     @Bean
     public SystemProperties systemProperties() {
-        return new SystemProperties(MyConfigFactory.getConfig(nodeIndex, null));
+        return new SystemProperties(MyConfigFactory.getDiscoveryConfig(nodeIndex, nodeName));
     }
 }

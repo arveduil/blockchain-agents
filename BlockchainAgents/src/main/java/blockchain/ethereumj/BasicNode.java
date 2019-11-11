@@ -37,7 +37,7 @@ public class BasicNode extends BasicSample {
 
     protected Map<ByteArrayWrapper, TransactionReceipt> txWaiters = Collections.synchronizedMap(new HashMap<>());
 
-    public BasicNode(String nodeName) {
+    public BasicNode(String nodeName, int nodeIndex) {
        super(nodeName);
        this.nodeName = nodeName;
        submittedTransactions = new ConcurrentLinkedQueue<>();
@@ -48,6 +48,7 @@ public class BasicNode extends BasicSample {
         System.out.println(nodeName);
         System.out.println("Public Key: " + Hex.toHexString(getECKey().getAddress()));
         System.out.println("Private Key: " + getECKey().getPrivKey());
+        EthereumJNodesContainer.add(nodeName, this);
     }
 
     {
@@ -68,7 +69,6 @@ public class BasicNode extends BasicSample {
                             final ArrayList<String> nodesString = new ArrayList<>();
                             for (NodeEntry node: nodes) {
                                 nodesString.add(node.getNode().getHost() + ":" + node.getNode().getPort() + "@" + node.getNode().getHexId().substring(0, 6) );
-
                             }
 
 
@@ -155,5 +155,15 @@ public class BasicNode extends BasicSample {
 
     public ECKey getECKey() {
         return config.getMyKey();
+    }
+
+    public void print() {
+        System.out.println("=========================");
+        System.out.println("=========================");
+        System.out.println("=========================");
+        System.out.println(getBalance());
+        System.out.println("=========================");
+        System.out.println("=========================");
+        System.out.println("=========================");
     }
 }

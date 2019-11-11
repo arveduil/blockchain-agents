@@ -8,8 +8,8 @@ import org.spongycastle.util.encoders.Hex;
 import java.util.Random;
 
 public class DiscoveryNode extends BasicNode {
-    public DiscoveryNode(String nodeName) {
-        super(nodeName);
+    public DiscoveryNode(String nodeName, int nodeIndex) {
+        super(nodeName, nodeIndex);
     }
 
     @Override
