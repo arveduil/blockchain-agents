@@ -5,9 +5,13 @@ import org.ethereum.crypto.ECKey;
 import org.ethereum.util.ByteUtil;
 import org.spongycastle.util.encoders.Hex;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class DiscoveryNode extends BasicNode {
+    private final List<String> otherNodesAddresses = new ArrayList<>();
+
     public DiscoveryNode(String nodeName, int nodeIndex) {
         super(nodeName, nodeIndex);
     }
@@ -46,6 +50,12 @@ public class DiscoveryNode extends BasicNode {
                 logger.info("<== Submitting tx: " + tx);
             }
             Thread.sleep(7000);
+        }
+    }
+
+    public void addNodeAddress(String hexId) {
+        if (!otherNodesAddresses.contains(hexId)) {
+            otherNodesAddresses.add(hexId);
         }
     }
 
