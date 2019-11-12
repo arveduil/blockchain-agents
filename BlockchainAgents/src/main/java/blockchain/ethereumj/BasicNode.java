@@ -18,6 +18,7 @@ import org.spongycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -139,8 +140,8 @@ public class BasicNode extends BasicSample {
         submittedTransactions.add(tx);
     }
 
-    public BigInteger getBalance() {
-        return ethereum.getRepository().getBalance(getECKey().getPrivKeyBytes());
+    public BigDecimal getBalance() {
+        return new BigDecimal(ethereum.getRepository().getBalance(getECKey().getPrivKeyBytes()));
     }
 
     public byte[] getMyAddress() {
