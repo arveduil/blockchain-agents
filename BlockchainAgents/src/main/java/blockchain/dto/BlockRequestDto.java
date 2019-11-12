@@ -6,7 +6,6 @@ import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,7 +37,7 @@ public class BlockRequestDto {
         dbBlock.Id = block.getNumber();
         dbBlock.ParentHash = Hex.toHexString(block.getParentHash());
         try {
-            dbBlock.MinedDate = new SimpleDateFormat("dd.MM.yyyy h:mm:ss").parse(Utils.longToDateTime(block.getTimestamp()));
+            dbBlock.MinedDate = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss a").parse(Utils.longToDateTime(block.getTimestamp()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
