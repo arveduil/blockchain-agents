@@ -6,21 +6,12 @@ import org.ethereum.config.SystemProperties;
 import org.ethereum.samples.BasicSample;
 import org.springframework.context.annotation.Bean;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Stack;
 
 public class Configs {
 
     private static String discoveryIp = "127.0.0.1:35000";
-    static {
-        try {
-            discoveryIp = InetAddress.getLocalHost().getHostAddress() + ":35000";
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void setDiscoveryIp(String discoveryIp) {
         discoveryIp = discoveryIp;

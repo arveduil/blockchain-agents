@@ -1,6 +1,10 @@
 package blockchain.dto;
 
+import org.ethereum.core.Transaction;
+import org.ethereum.util.ByteUtil;
+
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.rmi.server.UID;
 import java.util.Date;
 
@@ -24,5 +28,27 @@ public class TransactionRequestDto {
         dto.BlockHash = "BLOCK_CLIENT_HASH";
 
         return  dto;
+    }
+
+    public static TransactionRequestDto of(Transaction transaction, BlockRequestDto dbBlock) {
+        TransactionRequestDto dto = new TransactionRequestDto();
+
+        dto.Hash = toHexString(transaction.getHash());
+        dto.TransactionDate = new Date(dbBlock.timestamp);
+        dto.MoneyAmount = toBigDecimal(transaction.getValue());
+        dto.GasAmount = toBigDecimal(transaction.getGasPrice()).doubleValue();
+        dto.SourceClientHash = toHexString(transaction.getSender());
+        dto.DestinationClientHash = toHexString(transaction.getReceiveAddress());
+        dto.BlockHash = dbBlock.blockHash;
+
+        return dto;
+    }
+
+    private static String toHexString(byte[] bytes) {
+        return ByteUtil.toHexString(bytes);
+    }
+
+    private static BigDecimal toBigDecimal(byte[] bytes) {
+        return new BigDecimal(new BigInteger(bytes).toString());
     }
 }

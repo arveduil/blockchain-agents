@@ -31,8 +31,8 @@ public class MyConfigFactory {
     private static Config createConfig(int index, String nodeName, String discoveryNode, InetAddress localHost) {
         return ConfigFactory.empty()
                 .withValue("peer.discovery.enabled", value(true))
-                .withValue("peer.discovery.bind.ip", value(localHost.getHostAddress()))
-                .withValue("peer.discovery.external.ip", value(localHost.getHostAddress()))
+                .withValue("peer.discovery.bind.ip", value(null))
+                .withValue("peer.discovery.external.ip", value(null))
                 .withValue("peer.discovery.persist", value("false"))
 
                 .withValue("peer.listen.port", value(35000 + index))
@@ -55,7 +55,7 @@ public class MyConfigFactory {
         return ConfigFactory.empty()
                 .withValue("peer.discovery.enabled", value(true))
                 .withValue("peer.discovery.bind.ip", value(localHost.getHostAddress()))
-                .withValue("peer.discovery.external.ip", value(localHost.getHostAddress()))
+                .withValue("peer.discovery.external.ip", value(null))
                 .withValue("peer.discovery.persist", value("false"))
 
                 .withValue("peer.listen.port", value(35000 + index))

@@ -29,7 +29,6 @@ public class BasicNode extends BasicSample {
     @Autowired
     NodeManager nodeManager;
 
-    private int balance = 0;
     protected final List<String> otherNodesAddresses = new ArrayList<>();
     private final Queue<Transaction> submittedTransactions;
 
@@ -59,6 +58,7 @@ public class BasicNode extends BasicSample {
                     if (logger != null) {
                         Thread.sleep(15000);
                         if (channelManager != null) {
+                            // ethereum.getChannelManager().connect(new Node("enode://7483e5ce9e32c887d33d295804b30de10daff5fb@192.168.0.115:35000"));
                             final Collection<Channel> activePeers = channelManager.getActivePeers();
                             final ArrayList<String> ports = new ArrayList<>();
                             for (Channel channel: activePeers) {
@@ -99,7 +99,7 @@ public class BasicNode extends BasicSample {
             @Override
             public void onBlock(Block block, List<TransactionReceipt> receipts) {
                 BasicNode.this.onBlock(block, receipts);
-                logger.info("BALANCE: " + ethereum.getRepository().getBalance(getAddress()));
+                logger.info("BALANCE: " + ethereum.getRepository().getBalance(getMyAddress()));
             }
         });
         logger.info("onSyncDone");
@@ -118,6 +118,8 @@ public class BasicNode extends BasicSample {
         }
     }
 
+
+    // agent API
     public void sendTransaction(byte[] receiveAddress, int cashAmount, byte[] data) {
         BigInteger nounce = ethereum.getRepository().getNonce(getECKey().getAddress());
         Transaction tx = new Transaction(
@@ -137,33 +139,19 @@ public class BasicNode extends BasicSample {
         submittedTransactions.add(tx);
     }
 
-    public int getBalance() {
-        return balance;
+    public BigInteger getBalance() {
+        return ethereum.getRepository().getBalance(getECKey().getPrivKeyBytes());
     }
 
-    public void setBalance(int newBalance) {
-        this.balance = newBalance;
-    }
-
-    public byte[] getAddress() {
+    public byte[] getMyAddress() {
         return config.getMyKey().getAddress();
     }
 
-    //public void addNewAddress(byte[] addr) {
-    //    otherNodesAddresses.add(addr);
-    //}
+    public String getAddressString() {
+        return Hex.toHexString(getMyAddress());
+    }
 
     public ECKey getECKey() {
         return config.getMyKey();
-    }
-
-    public void print() {
-        System.out.println("=========================");
-        System.out.println("=========================");
-        System.out.println("=========================");
-        System.out.println(getBalance());
-        System.out.println("=========================");
-        System.out.println("=========================");
-        System.out.println("=========================");
     }
 }
