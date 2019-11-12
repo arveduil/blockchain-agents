@@ -6,6 +6,9 @@ import org.spongycastle.util.encoders.Hex;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +37,11 @@ public class BlockRequestDto {
         dbBlock.GasAmount = block.getGasUsed();
         dbBlock.Id = block.getNumber();
         dbBlock.ParentHash = Hex.toHexString(block.getParentHash());
-        dbBlock.MinedDate = new Date(Utils.longToDateTime(block.getTimestamp()));
+        try {
+            dbBlock.MinedDate = new SimpleDateFormat("dd.MM.yyyy h:mm:ss").parse(Utils.longToDateTime(block.getTimestamp()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         dbBlock.Difficulty = Hex.toHexString(block.getDifficulty());
         dbBlock.AwardForMining = toBigDecimal(block.getCoinbase());
 

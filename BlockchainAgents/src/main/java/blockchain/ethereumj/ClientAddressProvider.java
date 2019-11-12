@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class ClientAddressProvider {
 
-    private static final String ADDRESSES_ENDPOINT = "localhost:5149/api/blockchain/clients";
+    private static final String ADDRESSES_ENDPOINT = "http://localhost:51419/api/blockchain/clients";
 
     public static Set<String> getHashes() {
         String json = RemoteConnectionHandler.getServerAddressFromIpServer(ADDRESSES_ENDPOINT);

@@ -10,7 +10,7 @@ public class NodeFactory {
     public static DiscoveryNode createDiscoveryNode() {
         Ethereum ethereum = EthereumFactory.createEthereum(Configs.DiscoveryNodeConfig.class);
 
-        return (DiscoveryNode) EthereumJNodesContainer.getNode("discoveryNode0");
+        return (DiscoveryNode) EthereumJNodesContainer.getNode("discoveryNode");
     }
 
     public static synchronized BasicNode createRegularNode() {

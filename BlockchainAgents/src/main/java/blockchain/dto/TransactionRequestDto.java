@@ -49,6 +49,6 @@ public class TransactionRequestDto {
     }
 
     private static BigDecimal toBigDecimal(byte[] bytes) {
-        return new BigDecimal(new BigInteger(bytes).toString());
+        return new BigDecimal(new BigInteger(toHexString(bytes), 16));
     }
 }

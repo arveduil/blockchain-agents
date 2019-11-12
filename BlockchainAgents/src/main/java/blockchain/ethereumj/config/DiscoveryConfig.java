@@ -9,10 +9,12 @@ public class DiscoveryConfig {
 
     private final int nodeIndex;
     private final String nodeName;
+    private final String discoveryNode;
 
-    public DiscoveryConfig(int index, String nodeName) {
+    public DiscoveryConfig(int index, String nodeName, String discoveryNode) {
         this.nodeIndex = index;
         this.nodeName = nodeName;
+        this.discoveryNode = discoveryNode;
     }
 
     @Bean
@@ -22,6 +24,6 @@ public class DiscoveryConfig {
 
     @Bean
     public SystemProperties systemProperties() {
-        return new SystemProperties(MyConfigFactory.getDiscoveryConfig(nodeIndex, nodeName));
+        return new SystemProperties(MyConfigFactory.getDiscoveryConfig(nodeIndex, nodeName, discoveryNode));
     }
 }

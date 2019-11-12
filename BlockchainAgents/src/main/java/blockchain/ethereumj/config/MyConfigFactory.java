@@ -45,7 +45,7 @@ public class MyConfigFactory {
                 .withValue("peer.discovery.ip.list", value(discoveryNode != null ? Arrays.asList(discoveryNode) : Arrays.asList()));
     }
 
-    public static Config getDiscoveryConfig(int index, String nodeName) {
+    public static Config getDiscoveryConfig(int index, String nodeName, String discoveryNode) {
         InetAddress localHost = null;
         try {
             localHost = InetAddress.getLocalHost();
@@ -54,7 +54,7 @@ public class MyConfigFactory {
         }
         return ConfigFactory.empty()
                 .withValue("peer.discovery.enabled", value(true))
-                .withValue("peer.discovery.bind.ip", value(localHost.getHostAddress()))
+                .withValue("peer.discovery.bind.ip", value(discoveryNode.split(":")[0]))
                 .withValue("peer.discovery.external.ip", value(null))
                 .withValue("peer.discovery.persist", value("false"))
 

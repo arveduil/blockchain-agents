@@ -11,10 +11,10 @@ import java.util.Stack;
 
 public class Configs {
 
-    private static String discoveryIp = "192.168.0.115:35000";
+    private static String discoveryIp = "192.168.0.116:35000";
 
     public static void setDiscoveryIp(String discoveryIp) {
-        //discoveryIp = discoveryIp;
+        discoveryIp = discoveryIp;
     }
 
     private static Stack<Pair<String, Class<?>>> regularNodes = new Stack<>();
@@ -47,7 +47,7 @@ public class Configs {
 
     public static class DiscoveryNodeConfig extends DiscoveryConfig {
         public DiscoveryNodeConfig() {
-            super(0, "discoveryNode");
+            super(0, "discoveryNode", discoveryIp);
         }
         @Bean
         public SystemProperties systemProperties() {
