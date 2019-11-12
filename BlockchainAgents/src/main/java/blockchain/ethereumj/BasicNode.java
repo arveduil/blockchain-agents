@@ -114,7 +114,6 @@ public class BasicNode extends BasicSample {
         }
     }
 
-
     // agent API
     public void sendTransaction(byte[] receiveAddress, int cashAmount, byte[] data) {
         BigInteger nounce = ethereum.getRepository().getNonce(getECKey().getAddress());

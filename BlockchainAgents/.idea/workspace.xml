@@ -2,21 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82fb2c8c-c21f-49f4-b91b-687c704075fd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/MiningBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/MiningBehaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/PurchaseSellBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/PurchaseSellBehaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/SendOfferForSaleBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/SendOfferForSaleBehaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Wallet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Wallet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/dto/BlockRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/BlockRequestDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/dto/TransactionRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/TransactionRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/ClientAddressProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/DiscoveryServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/BasicNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/BasicNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/DiscoveryNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/DiscoveryNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/NodeFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/NodeFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/config/Configs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/config/Configs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/utils/RemoteConnectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/RemoteConnectionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/TestForPrivateNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/TestForPrivateNetwork.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -205,7 +195,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added sending logs to server. Added config file" />
     <MESSAGE value="Removed dockerfile, minor fixes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed dockerfile, minor fixes." />
+    <MESSAGE value="Integration with ethereum." />
+    <option name="LAST_COMMIT_MESSAGE" value="Integration with ethereum." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
