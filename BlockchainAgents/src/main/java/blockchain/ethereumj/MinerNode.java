@@ -1,11 +1,14 @@
 package blockchain.ethereumj;
 
+import blockchain.dto.BlockRequestDto;
 import org.ethereum.core.Block;
 import org.ethereum.core.TransactionReceipt;
 import org.ethereum.db.ByteArrayWrapper;
 import org.ethereum.listener.EthereumListenerAdapter;
 import org.ethereum.mine.EthashListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -63,7 +66,7 @@ public class MinerNode extends BasicNode implements EthashListener {
     @Override
     public void blockMined(Block block) {
         logger.info("Block mined! : \n" + block);
-        System.out.println("Balance: " + ethereum.getRepository().getBalance(getAddress()));
+        System.out.println("Balance: " + ethereum.getRepository().getBalance(getMyAddress()));
         minedBlocks.add(block);
     }
 
@@ -72,7 +75,12 @@ public class MinerNode extends BasicNode implements EthashListener {
         logger.info("Cancel mining block: " + block.getShortDescr());
     }
 
-    public Queue<Block> getMinedBlocks() {
-        return minedBlocks;
+    public List<BlockRequestDto> getMinedBlocks() {
+        List<BlockRequestDto> blocks = new ArrayList<>();
+        for (Block minedBlock : minedBlocks) {
+            blocks.add(BlockRequestDto.of(minedBlock));
+            minedBlocks.remove(minedBlock);
+        }
+        return blocks;
     }
 }
