@@ -6,18 +6,12 @@ import blockchain.currencies.Wallet;
 import blockchain.dto.ClientRequestDto;
 import blockchain.dto.ClientType;
 import blockchain.dto.TransactionRequestDto;
-import blockchain.utils.Config;
 import blockchain.utils.RemoteConnectionHandler;
 import blockchain.utils.RequestType;
 import blockchain.utils.Utils;
 import com.google.gson.Gson;
 import jade.core.Agent;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -40,15 +34,15 @@ public class ClientAgent extends Agent {
         Object[] args = getArguments();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.json");
 
-        FileReader reader = null;
-        try {
-            reader = new FileReader("config.json");
-            JSONParser jsonParser = new JSONParser();
-            JSONObject configJson =  (JSONObject) jsonParser.parse(reader);
-            Config config = gson.fromJson( configJson.toString(), Config.class);
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
+//        FileReader reader = null;
+//        try {
+//            reader = new FileReader("config.json");
+//            JSONParser jsonParser = new JSONParser();
+//            JSONObject configJson =  (JSONObject) jsonParser.parse(reader);
+//            Config config = gson.fromJson( configJson.toString(), Config.class);
+//        } catch (ParseException | IOException e) {
+//            e.printStackTrace();
+//        }
 
 
         //Args:
