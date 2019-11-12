@@ -116,5 +116,6 @@ public class ClientAgent extends Agent {
 
     public void setWalletState(BigDecimal balance) {
         this.wallet.setEthAmount(new Ethereum(balance.toString()));
+        logAddingClient();
     }
 }
