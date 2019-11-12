@@ -6,6 +6,7 @@ import blockchain.utils.Utils;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import org.spongycastle.util.encoders.Hex;
 
 public class PurchaseSellBehaviour extends Behaviour {
     private ClientAgent clientAgent;
@@ -21,20 +22,26 @@ public class PurchaseSellBehaviour extends Behaviour {
         MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
         ACLMessage msg = myAgent.receive(mt);
         if (msg != null) {
-            Ethereum amountToSell = new Ethereum(msg.getContent());
+            String buyerHash = msg.getContent().split(";")[1];
+
+            Ethereum amountToSell = new Ethereum(msg.getContent().split(";")[0]);
             ACLMessage reply = msg.createReply();
-            if(clientAgent.getWalletState().compareTo(amountToSell) != -1){
+            if(clientAgent.getWalletState().add(clientAgent.ethereumNode.getCurrentGasPrice()).compareTo(amountToSell) != -1){
+                //TU HASZ KUPCA
+                byte[] receiverAddress = Hex.decode(buyerHash);
+                clientAgent.ethereumNode.sendTransaction(receiverAddress,amountToSell.toBigInteger().intValue() ,new byte[] {});
+                Utils.log(clientAgent,"Giving money to " + msg.getSender().getLocalName() + " with hash " + buyerHash);
+
                 reply.setPerformative(ACLMessage.INFORM);
 
-                clientAgent.substractFromWallet(amountToSell);
                 reply.setContent("money substracted");
 
-                Utils.log(clientAgent,"Giving money to " + msg.getSender().getLocalName());
+                //Utils.log(clientAgent,"Giving money to " + msg.getSender().getLocalName());
                 Utils.logWalletState(this.clientAgent);
             }else{
                 reply.setPerformative(ACLMessage.FAILURE);
                 reply.setContent("money not-available");
-                Utils.log(clientAgent,"Cannot give money to " + msg.getSender().getLocalName());
+                //Utils.log(clientAgent,"Cannot give money to " + msg.getSender().getLocalName());
             }
 
             myAgent.send(reply);

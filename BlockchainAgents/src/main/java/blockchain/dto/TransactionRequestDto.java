@@ -34,12 +34,12 @@ public class TransactionRequestDto {
         TransactionRequestDto dto = new TransactionRequestDto();
 
         dto.Hash = toHexString(transaction.getHash());
-        dto.TransactionDate = new Date(dbBlock.timestamp);
+        dto.TransactionDate = dbBlock.MinedDate;
         dto.MoneyAmount = toBigDecimal(transaction.getValue());
         dto.GasAmount = toBigDecimal(transaction.getGasPrice()).doubleValue();
         dto.SourceClientHash = toHexString(transaction.getSender());
         dto.DestinationClientHash = toHexString(transaction.getReceiveAddress());
-        dto.BlockHash = dbBlock.blockHash;
+        dto.BlockHash = dbBlock.Hash;
 
         return dto;
     }

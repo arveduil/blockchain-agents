@@ -11,6 +11,10 @@ public class Wallet {
         blockHash = "DEFAULT_BlOCK_HASH";
     }
 
+    public void setEthAmount(Ethereum ethAmmount) {
+        this.ethAmmount = ethAmmount;
+    }
+
     public void addToWallet(Ethereum amount){
         ethAmmount = ethAmmount.add(amount);
 

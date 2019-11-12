@@ -13,14 +13,14 @@ public class NodeFactory {
         return (DiscoveryNode) EthereumJNodesContainer.getNode("discoveryNode0");
     }
 
-    public static BasicNode createRegularNode() {
+    public static synchronized BasicNode createRegularNode() {
         Pair<String, Class<?>> regularNodeConfig = Configs.getRegularNodeConfig();
         Ethereum ethereum = EthereumFactory.createEthereum(regularNodeConfig.getRight());
 
         return EthereumJNodesContainer.getNode(regularNodeConfig.getLeft());
     }
 
-    public static MinerNode createMinerNode() {
+    public static synchronized MinerNode createMinerNode() {
         Pair<String, Class<?>> minerNodeConfig = Configs.getMinerNodeConfig();
         Ethereum ethereum = EthereumFactory.createEthereum(minerNodeConfig.getRight());
 

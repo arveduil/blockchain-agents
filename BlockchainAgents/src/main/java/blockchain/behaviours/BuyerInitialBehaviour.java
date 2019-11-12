@@ -2,6 +2,7 @@ package blockchain.behaviours;
 
 import blockchain.agents.ClientAgent;
 import blockchain.currencies.Ethereum;
+import blockchain.dto.ClientType;
 import blockchain.utils.RemoteConnectionHandler;
 import blockchain.utils.Utils;
 import jade.core.AID;
@@ -30,6 +31,12 @@ public class BuyerInitialBehaviour extends TickerBehaviour {
 
     protected void onTick()
     {
+        if(!clientAgent.ethereumNode.isSynced) return;
+
+        clientAgent.setWalletState( clientAgent.ethereumNode.getBalance());
+
+        if(clientAgent.clientType == ClientType.Miner) return;
+
         Utils.log(clientAgent.getName(),"Buyers looks for " + desiredAmount);
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
@@ -58,5 +65,4 @@ public class BuyerInitialBehaviour extends TickerBehaviour {
             fe.printStackTrace();
         }
     }
-
 }

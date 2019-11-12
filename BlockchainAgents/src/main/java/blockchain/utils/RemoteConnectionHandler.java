@@ -46,6 +46,10 @@ public class RemoteConnectionHandler {
         serverPort = response.split(SEPARATOR)[1];
     }
 
+    public String getOnlyServerIp(){
+        return serverIp;
+    }
+
     public String getServerAddress(){
         return SERVER_PROTOCOL + serverIp + SEPARATOR + serverPort;
     }

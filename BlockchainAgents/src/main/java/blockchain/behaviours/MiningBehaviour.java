@@ -1,14 +1,18 @@
 package blockchain.behaviours;
 
-import blockchain.agents.ClientAgent;
+import blockchain.agents.MinerAgent;
 import blockchain.currencies.Ethereum;
+import blockchain.dto.BlockRequestDto;
+import blockchain.ethereumj.MinerNode;
 import blockchain.utils.Utils;
 import jade.core.behaviours.TickerBehaviour;
 
+import java.util.List;
+
 public class MiningBehaviour extends TickerBehaviour {
-    private ClientAgent minerAgent;
+    private MinerAgent minerAgent;
     private Ethereum income;
-    public MiningBehaviour(ClientAgent a, long period, Ethereum income) {
+    public MiningBehaviour(MinerAgent a, long period, Ethereum income) {
         super(a, period);
         this.minerAgent = a;
         this.income = income;
@@ -16,9 +20,10 @@ public class MiningBehaviour extends TickerBehaviour {
 
     @Override
     protected void onTick() {
-
-        minerAgent.addToWallet(income);
-
-        Utils.log(minerAgent, "Miner mining, wallet: " + minerAgent.getWalletState());
+        List<BlockRequestDto> minedBlocks = ((MinerNode) minerAgent.ethereumNode).getMinedBlocks();
+        if(!minedBlocks.isEmpty()){
+            minerAgent.logBlocks(minedBlocks);
+            Utils.log(minerAgent, "Miner sent blocks with size " + minedBlocks.size());
+        }
     }
 }

@@ -30,12 +30,12 @@ public class BasicNode extends BasicSample {
     @Autowired
     NodeManager nodeManager;
 
-    protected final List<String> otherNodesAddresses = new ArrayList<>();
     private final Queue<Transaction> submittedTransactions;
 
     private final String nodeName;
 
     protected Map<ByteArrayWrapper, TransactionReceipt> txWaiters = Collections.synchronizedMap(new HashMap<>());
+    public boolean isSynced = false;
 
     public BasicNode(String nodeName, int nodeIndex) {
        super(nodeName);
@@ -88,12 +88,6 @@ public class BasicNode extends BasicSample {
         }).start();
     }
 
-    private void addNodeAddress(String hexId) {
-        if (!otherNodesAddresses.contains(hexId)) {
-            otherNodesAddresses.add(hexId);
-        }
-    }
-
     @Override
     public void onSyncDone() {
         ethereum.addListener(new EthereumListenerAdapter() {
@@ -104,6 +98,7 @@ public class BasicNode extends BasicSample {
             }
         });
         logger.info("onSyncDone");
+        isSynced = true;
     }
 
 
@@ -154,5 +149,9 @@ public class BasicNode extends BasicSample {
 
     public ECKey getECKey() {
         return config.getMyKey();
+    }
+
+    public BigDecimal getCurrentGasPrice() {
+        return new BigDecimal(ethereum.getGasPrice());
     }
 }

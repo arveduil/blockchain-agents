@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="82fb2c8c-c21f-49f4-b91b-687c704075fd" name="Default Changelist" comment="Removed dockerfile, minor fixes.">
+    <list default="true" id="82fb2c8c-c21f-49f4-b91b-687c704075fd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/APDescription.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MTPs-Main-Container.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/MiningBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/MiningBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/PurchaseSellBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/PurchaseSellBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/SendOfferForSaleBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/SendOfferForSaleBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Wallet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/currencies/Wallet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/dto/BlockRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/BlockRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/dto/TransactionRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/dto/TransactionRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/BasicNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/BasicNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/DiscoveryNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/DiscoveryNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/NodeFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/NodeFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/config/Configs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/config/Configs.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/utils/RemoteConnectionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/RemoteConnectionHandler.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -44,6 +53,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MavenImportPreferences">
@@ -72,6 +86,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -93,7 +108,7 @@
     <configuration name="2miners2client" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="jade.Boot" />
       <module name="BlockchainAgents" />
-      <option name="PROGRAM_PARAMETERS" value="-mtp &quot;jade.mtp.http.MessageTransportProtocol(http://192.168.0.10:7778/acc)&quot; -gui miner1:blockchain.agents.MinerAgent(0,0,Miner);miner2:blockchain.agents.MinerAgent(0,0,Miner);client1:blockchain.agents.ClientAgent(5000,300,Client);client2:blockchain.agents.ClientAgent(6000,400,Client);sniffer:jade.tools.sniffer.Sniffer(s)" />
+      <option name="PROGRAM_PARAMETERS" value="-mtp &quot;jade.mtp.http.MessageTransportProtocol(http://192.168.0.10:7778/acc)&quot; -gui miner1:blockchain.agents.MinerAgent(6000,0,Miner);miner2:blockchain.agents.MinerAgent(6000,0,Miner);client1:blockchain.agents.ClientAgent(6000,10000,Client);client2:blockchain.agents.ClientAgent(6000,20000,Client);sniffer:jade.tools.sniffer.Sniffer(s)" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -152,7 +167,7 @@
       <workItem from="1573518059870" duration="784000" />
       <workItem from="1573519128306" duration="433000" />
       <workItem from="1573576509010" duration="1067000" />
-      <workItem from="1573581350462" duration="1593000" />
+      <workItem from="1573581350462" duration="11840000" />
     </task>
     <task id="LOCAL-00001" summary="Added sending logs to server. Added config file">
       <created>1573318340800</created>
@@ -161,7 +176,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573318340800</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Removed dockerfile, minor fixes.">
+      <created>1573584637722</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1573584637722</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -210,18 +232,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/blockchain/utils/RemoteConnectionHandler.java</url>
-          <line>54</line>
+          <line>58</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/blockchain/utils/RemoteConnectionHandler.java</url>
-          <line>93</line>
+          <line>97</line>
           <option name="timeStamp" value="25" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java</url>
-          <line>32</line>
-          <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

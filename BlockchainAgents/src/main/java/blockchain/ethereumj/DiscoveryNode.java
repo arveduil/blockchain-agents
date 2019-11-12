@@ -5,9 +5,13 @@ import org.ethereum.crypto.ECKey;
 import org.ethereum.util.ByteUtil;
 import org.spongycastle.util.encoders.Hex;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class DiscoveryNode extends BasicNode {
+    private final List<byte[]> otherNodesAddresses = new ArrayList<>();
+
     public DiscoveryNode(String nodeName, int nodeIndex) {
         super(nodeName, nodeIndex);
     }
@@ -29,7 +33,8 @@ public class DiscoveryNode extends BasicNode {
 
         // the sender which some coins from the genesis
         ECKey senderKey = getECKey();
-        byte[] receiverAddr = Hex.decode("2b29bea668b044b2b355c370f85b729bcb43ec40");
+        byte[] receiverAddr = getRandomAddress();
+        //byte[] receiverAddr = Hex.decode("2b29bea668b044b2b355c370f85b729bcb43ec40");
 
         for (int i = ethereum.getRepository().getNonce(senderKey.getAddress()).intValue(), j = 0; j < 20000; i++, j++) {
             {
@@ -49,7 +54,14 @@ public class DiscoveryNode extends BasicNode {
         }
     }
 
-    private String getRandomAddress() {
+    public void addNodeAddress(String hexId) {
+        byte[] bytes = Hex.decode(hexId);
+        if (!otherNodesAddresses.contains(bytes)) {
+            otherNodesAddresses.add(bytes);
+        }
+    }
+
+    private byte[] getRandomAddress() {
         Random rand = new Random();
         return otherNodesAddresses.get(rand.nextInt(otherNodesAddresses.size()));
     }

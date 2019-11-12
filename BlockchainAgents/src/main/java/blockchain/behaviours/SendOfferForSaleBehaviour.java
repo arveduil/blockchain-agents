@@ -46,7 +46,8 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
     private void decorateReplyWithDecision(Ethereum amountRequested, ACLMessage reply) {
         Utils.log(agentWithWallet,"Amount requested: " + amountRequested + " amount to offer " + agentWithWallet.getWalletState());
 
-        if (canAfford(amountRequested)){
+
+        if (agentWithWallet.ethereumNode.isSynced && canAfford(amountRequested)){
             fillReplyWithPropose(reply);
         }
         else{
@@ -66,7 +67,7 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
         Utils.log(agentWithWallet,"Response PROPOSE");
     }
 
-    private boolean canAfford(Ethereum amountRequested){
-        return agentWithWallet.hasInWallet(amountRequested);
+    private boolean canAfford(Ethereum amountRequested) {
+        return (agentWithWallet.getWalletState().add(agentWithWallet.ethereumNode.getCurrentGasPrice()).compareTo(amountRequested) != -1);
     }
 }

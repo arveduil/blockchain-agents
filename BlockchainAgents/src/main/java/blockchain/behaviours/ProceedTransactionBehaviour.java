@@ -9,6 +9,7 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -23,6 +24,7 @@ public class ProceedTransactionBehaviour extends Behaviour {
     private ClientAgent agent;
     private int repliesCounter = 0;
     private ArrayList sellersWhoRespondedWithProposal;
+    private BigDecimal walletStateBeforeTransaction;
 
     public ProceedTransactionBehaviour(ClientAgent agent, Ethereum amountToBuy, AID[] agentsWithSellOffer) {
         super(agent);
@@ -74,26 +76,39 @@ public class ProceedTransactionBehaviour extends Behaviour {
                 mt = MessageTemplate.and(MessageTemplate.MatchConversationId(MessageContent.TRANSACTION_CONFIRMATION.toString()),
                         MessageTemplate.MatchInReplyTo(order.getReplyWith()));
 
+                walletStateBeforeTransaction = agent.ethereumNode.getBalance();
                 state = BuyerState.FINALIZING_TRANSACTION;
                 break;
             case FINALIZING_TRANSACTION:
                 //confirm transaction receive
                 //HERE RECEIVER ADD MONEY TO ACCOUNT
                 reply = myAgent.receive(mt);
-                if (reply != null) {
-                    handleTransactionConfirmation(reply);
+                BigDecimal currentWalletState = agent.ethereumNode.getBalance();
+
+                if(currentWalletState.compareTo(walletStateBeforeTransaction) == 1){
+
+                    Utils.log(agent.getLocalName(),"TRANSACTION NOTICED, current wallet " + currentWalletState.toString());
+
+                    agent.setWalletState(currentWalletState);
                     state = BuyerState.END;
                 }
-                else {
-                    block();
-                }
+
+//                if (reply != null) {
+//                    handleTransactionConfirmation(reply);
+//                    state = BuyerState.END;
+//                }
+//                else {
+//                    block();
+//                }
                 break;
         }
     }
 
     private ACLMessage createCfpMessageAsBuyOffer() {
         ACLMessage cfp = setupCfpMessageWithReceivers();
-        cfp.setContent(amountToBuy.toString());
+
+
+        cfp.setContent( amountToBuy.toString());
         cfp.setConversationId("blockchain");
         cfp.setReplyWith("cfp" + System.currentTimeMillis());
         return cfp;
@@ -120,7 +135,12 @@ public class ProceedTransactionBehaviour extends Behaviour {
 
     private void decorateAcceptProposalOrderAsTransactionConfirmation(ACLMessage order) {
         order.addReceiver(sellerChoosen);
-        order.setContent(amountToBuy.toString());
+
+        String clientHash = agent.ethereumNode.getAddressString();
+
+        String msgContent = amountToBuy.toString() + ";"+ clientHash;
+
+        order.setContent(msgContent);
         order.setConversationId(MessageContent.TRANSACTION_CONFIRMATION.toString());
         order.setReplyWith("order"+System.currentTimeMillis());
     }
@@ -136,7 +156,7 @@ public class ProceedTransactionBehaviour extends Behaviour {
 
     private void succesfullyReceivedAmount(ACLMessage reply) {
         agent.addToWallet(amountToBuy);
-        agent.logTransaction(agent.getName(), reply.getSender().getName());
+        //agent.logTransaction(agent.getName(), reply.getSender().getName());
         Utils.log(this.agent,"Received" + amountToBuy + " from " + reply.getSender().getName());
         Utils.log(this.agent,"Transaction finished successfully with" + reply.getSender().getName());
         Utils.logWalletState(this.agent);
