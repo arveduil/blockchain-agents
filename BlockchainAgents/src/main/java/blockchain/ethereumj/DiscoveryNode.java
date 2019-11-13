@@ -36,7 +36,7 @@ public class DiscoveryNode extends BasicNode {
         // the sender which some coins from the genesis
         ECKey senderKey = getECKey();
 
-        Random rand = new Random(3225);
+        Random rand = new Random();
         for (int i = ethereum.getRepository().getNonce(senderKey.getAddress()).intValue(), j = 0; j < 20000; i++, j++) {
             {
                 byte[] receiverAddr = getRandomAddress();
@@ -66,7 +66,7 @@ public class DiscoveryNode extends BasicNode {
     private byte[] getRandomAddress() {
         byte[] address;
         do {
-            address = Hex.decode(otherNodesAddresses.get(rand.nextInt(otherNodesAddresses.size())));
+            address = Hex.decode(otherNodesAddresses.get(new Random().nextInt(otherNodesAddresses.size())));
         } while (Arrays.equals(address, getMyAddress()));
 
         return address;

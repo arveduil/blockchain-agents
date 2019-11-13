@@ -94,6 +94,7 @@ public class BasicNode extends BasicSample {
             @Override
             public void onBlock(Block block, List<TransactionReceipt> receipts) {
                 BasicNode.this.onBlock(block, receipts);
+                isSynced = true;
                 logger.info("BALANCE: " + ethereum.getRepository().getBalance(getMyAddress()));
             }
         });
