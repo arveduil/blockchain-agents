@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="82fb2c8c-c21f-49f4-b91b-687c704075fd" name="Default Changelist" comment="Added more logs.">
+    <list default="true" id="82fb2c8c-c21f-49f4-b91b-687c704075fd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/BuyerInitialBehaviour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/SendOfferForSaleBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/SendOfferForSaleBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/config/Configs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/config/Configs.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,6 +47,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
@@ -156,6 +157,7 @@
       <workItem from="1573519128306" duration="433000" />
       <workItem from="1573576509010" duration="1067000" />
       <workItem from="1573581350462" duration="11840000" />
+      <workItem from="1573655938089" duration="1073000" />
     </task>
     <task id="LOCAL-00001" summary="Added sending logs to server. Added config file">
       <created>1573318340800</created>
@@ -178,7 +180,14 @@
       <option name="project" value="LOCAL" />
       <updated>1573611664102</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Logs">
+      <created>1573614260847</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1573614260847</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -202,7 +211,8 @@
     <MESSAGE value="Removed dockerfile, minor fixes." />
     <MESSAGE value="Integration with ethereum." />
     <MESSAGE value="Added more logs." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added more logs." />
+    <MESSAGE value="Logs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Logs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

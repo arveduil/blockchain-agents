@@ -14,7 +14,7 @@ public class Configs {
     private static String discoveryIp = "192.168.43.187:35000";
 
     public static void setDiscoveryIp(String discoveryIp) {
-        discoveryIp = discoveryIp;
+        Configs.discoveryIp = discoveryIp + ":35000";
     }
 
     private static Stack<Pair<String, Class<?>>> regularNodes = new Stack<>();
