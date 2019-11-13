@@ -63,6 +63,12 @@ public class DiscoveryNode extends BasicNode {
 
     private byte[] getRandomAddress() {
         Random rand = new Random();
-        return otherNodesAddresses.get(rand.nextInt(otherNodesAddresses.size()));
+
+        byte[] address;
+        do {
+            address = otherNodesAddresses.get(rand.nextInt(otherNodesAddresses.size()));
+        } while (address.equals(getMyAddress()));
+
+        return address;
     }
 }

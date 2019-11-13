@@ -135,7 +135,7 @@ public class BasicNode extends BasicSample {
     }
 
     public BigDecimal getBalance() {
-        return new BigDecimal(ethereum.getRepository().getBalance(getECKey().getPrivKeyBytes()));
+        return new BigDecimal(ethereum.getRepository().getBalance(getECKey().getAddress()));
     }
 
     public byte[] getMyAddress() {
