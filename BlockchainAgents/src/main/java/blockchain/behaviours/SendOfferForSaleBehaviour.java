@@ -8,6 +8,8 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.math.BigDecimal;
+
 public class SendOfferForSaleBehaviour extends CyclicBehaviour {
     private ClientAgent agentWithWallet;
 
@@ -44,10 +46,11 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
     }
 
     private void decorateReplyWithDecision(Ethereum amountRequested, ACLMessage reply) {
-        Utils.log(agentWithWallet,"Amount requested: " + amountRequested + " amount to offer " + agentWithWallet.getWalletState());
+        Utils.log(agentWithWallet,"Amount requested: " + amountRequested + " amount in balance " + agentWithWallet.ethereumNode.getBalance());
 
+        Utils.log(agentWithWallet,"Is synced "+ agentWithWallet.ethereumNode.isSynced );
 
-        if (agentWithWallet.ethereumNode.isSynced && canAfford(amountRequested)){
+        if (canAfford(amountRequested)){
             fillReplyWithPropose(reply);
         }
         else{
@@ -68,6 +71,8 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
     }
 
     private boolean canAfford(Ethereum amountRequested) {
-        return (agentWithWallet.ethereumNode.getBalance().add(agentWithWallet.ethereumNode.getCurrentGasPrice()).compareTo(amountRequested) != -1);
+        BigDecimal totalCost = (amountRequested.add(agentWithWallet.ethereumNode.getCurrentGasPrice()));
+        Utils.log(agentWithWallet,"current blance: " + agentWithWallet.ethereumNode.getBalance()+ " total cost: " + totalCost.toString());
+        return (agentWithWallet.ethereumNode.getBalance().compareTo(totalCost) != -1);
     }
 }

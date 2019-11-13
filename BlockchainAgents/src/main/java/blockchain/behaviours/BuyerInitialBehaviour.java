@@ -31,6 +31,8 @@ public class BuyerInitialBehaviour extends TickerBehaviour {
 
     protected void onTick()
     {
+        Utils.log(clientAgent.getName(),"BuyerInitial isSynced " + clientAgent.ethereumNode.isSynced);
+
         if(!clientAgent.ethereumNode.isSynced) return;
 
         clientAgent.setWalletState( clientAgent.ethereumNode.getBalance());
