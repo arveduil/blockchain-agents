@@ -23,7 +23,7 @@ public class MiningBehaviour extends TickerBehaviour {
         List<BlockRequestDto> minedBlocks = ((MinerNode) minerAgent.ethereumNode).getMinedBlocks();
         if(!minedBlocks.isEmpty()){
             minerAgent.logBlocks(minedBlocks);
-            Utils.log(minerAgent, "Miner sent blocks with size " + minedBlocks.size());
+            Utils.log(minerAgent, "Miner sent blocks with size " );
         }
     }
 }

@@ -69,7 +69,7 @@ public class ProceedTransactionBehaviour extends Behaviour {
 
                 decorateAcceptProposalOrderAsTransactionConfirmation(order);
 
-                Utils.log(this.agent,"Send ACCEPT_PROPOSAL to " + sellerChoosen.getName());
+                Utils.log(this.agent,"Send ACCEPT "+ order.getContent() +" to " + sellerChoosen.getName());
 
                 myAgent.send(order);
 
@@ -84,6 +84,7 @@ public class ProceedTransactionBehaviour extends Behaviour {
                 //HERE RECEIVER ADD MONEY TO ACCOUNT
                 reply = myAgent.receive(mt);
                 BigDecimal currentWalletState = agent.ethereumNode.getBalance();
+                Utils.log(agent.getLocalName(),"Waiting for transaction confirmation, current wallet " + currentWalletState.toString());
 
                 if(currentWalletState.compareTo(walletStateBeforeTransaction) == 1){
 

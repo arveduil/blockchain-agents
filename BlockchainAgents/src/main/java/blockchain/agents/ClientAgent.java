@@ -86,7 +86,7 @@ public class ClientAgent extends Agent {
         ClientRequestDto requestDto =  ClientRequestDto.of(this.ethereumNode,clientType == ClientType.Miner);
         String json = gson.toJson(requestDto);
         String path = remoteConnectionHandler.getServerAddress() + "/" + addClientRequestPath;
-        Utils.log(getAID().getLocalName(), " has wallet hash " +requestDto.Hash);
+        Utils.log(getAID().getName(), " has wallet hash " +requestDto.Hash + " with amount " + requestDto.Amount);
 
         RemoteConnectionHandler.sendRequestToServer(path,json,RequestType.POST);
     }

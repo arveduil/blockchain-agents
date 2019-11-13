@@ -30,14 +30,14 @@ public class PurchaseSellBehaviour extends Behaviour {
                 //TU HASZ KUPCA
                 byte[] receiverAddress = Hex.decode(buyerHash);
                 clientAgent.ethereumNode.sendTransaction(receiverAddress,amountToSell.toBigInteger().intValue() ,new byte[] {});
-                Utils.log(clientAgent,"Giving money to " + msg.getSender().getLocalName() + " with hash " + buyerHash);
+                Utils.log(clientAgent,"Giving money to " + msg.getSender().getName() + " with hash " + buyerHash);
 
                 reply.setPerformative(ACLMessage.INFORM);
 
                 reply.setContent("money substracted");
 
                 //Utils.log(clientAgent,"Giving money to " + msg.getSender().getLocalName());
-                Utils.logWalletState(this.clientAgent);
+              //  Utils.logWalletState(this.clientAgent);
             }else{
                 reply.setPerformative(ACLMessage.FAILURE);
                 reply.setContent("money not-available");

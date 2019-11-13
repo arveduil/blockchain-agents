@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82fb2c8c-c21f-49f4-b91b-687c704075fd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/ClientAddressProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/DiscoveryServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/BasicNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/BasicNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/DiscoveryNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/DiscoveryNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/TestForPrivateNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/ethereumj/TestForPrivateNetwork.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/agents/ClientAgent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/MiningBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/MiningBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/ProceedTransactionBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/PurchaseSellBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/PurchaseSellBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/SendOfferForSaleBehaviour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/behaviours/SendOfferForSaleBehaviour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/utils/Utils.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -98,7 +100,7 @@
     <configuration name="2miners2client" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="jade.Boot" />
       <module name="BlockchainAgents" />
-      <option name="PROGRAM_PARAMETERS" value="-mtp &quot;jade.mtp.http.MessageTransportProtocol(http://192.168.0.10:7778/acc)&quot; -gui miner1:blockchain.agents.MinerAgent(6000,0,Miner);miner2:blockchain.agents.MinerAgent(6000,0,Miner);client1:blockchain.agents.ClientAgent(6000,10000,Client);client2:blockchain.agents.ClientAgent(6000,20000,Client);sniffer:jade.tools.sniffer.Sniffer(s)" />
+      <option name="PROGRAM_PARAMETERS" value="-mtp &quot;jade.mtp.http.MessageTransportProtocol(http://192.168.0.10:7778/acc)&quot; -gui miner11:blockchain.agents.MinerAgent(6000,0,Miner);miner22:blockchain.agents.MinerAgent(6000,0,Miner);client11:blockchain.agents.ClientAgent(6000,10000,Client);client22:blockchain.agents.ClientAgent(6000,20000,Client);sniffer:jade.tools.sniffer.Sniffer(s)" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>

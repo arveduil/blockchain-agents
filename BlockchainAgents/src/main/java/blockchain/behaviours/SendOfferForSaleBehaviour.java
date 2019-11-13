@@ -58,7 +58,7 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
     private void fillReplyWithRefuse(ACLMessage reply) {
         reply.setPerformative(ACLMessage.REFUSE);
         reply.setContent(MessageContent.NOT_ENOUGH_MONEY.toString());
-        Utils.log(agentWithWallet,"Response REFUSE");
+        Utils.log(agentWithWallet,"Response REFUSE, current balance " + agentWithWallet.ethereumNode.getBalance());
     }
 
     private void fillReplyWithPropose(ACLMessage reply) {
@@ -68,6 +68,6 @@ public class SendOfferForSaleBehaviour extends CyclicBehaviour {
     }
 
     private boolean canAfford(Ethereum amountRequested) {
-        return (agentWithWallet.getWalletState().add(agentWithWallet.ethereumNode.getCurrentGasPrice()).compareTo(amountRequested) != -1);
+        return (agentWithWallet.ethereumNode.getBalance().add(agentWithWallet.ethereumNode.getCurrentGasPrice()).compareTo(amountRequested) != -1);
     }
 }

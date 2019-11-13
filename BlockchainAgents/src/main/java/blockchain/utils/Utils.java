@@ -13,7 +13,7 @@ public  class Utils {
     }
 
     public static void log(Agent author, String message){
-        Utils.log(author.getLocalName(),message);
+        Utils.log(author.getName(),message);
     }
 
     public static void logWalletState(ClientAgent authorAgent){
