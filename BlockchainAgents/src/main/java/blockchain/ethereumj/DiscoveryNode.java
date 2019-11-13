@@ -7,11 +7,12 @@ import org.ethereum.util.blockchain.EtherUtil;
 import org.spongycastle.util.encoders.Hex;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class DiscoveryNode extends BasicNode {
-    private final List<byte[]> otherNodesAddresses = new ArrayList<>();
+    private final List<String> otherNodesAddresses = new ArrayList<>();
 
     public DiscoveryNode(String nodeName, int nodeIndex) {
         super(nodeName, nodeIndex);
@@ -34,15 +35,16 @@ public class DiscoveryNode extends BasicNode {
 
         // the sender which some coins from the genesis
         ECKey senderKey = getECKey();
-        byte[] receiverAddr = getRandomAddress();
 
+        Random rand = new Random(3225);
         for (int i = ethereum.getRepository().getNonce(senderKey.getAddress()).intValue(), j = 0; j < 20000; i++, j++) {
             {
+                byte[] receiverAddr = getRandomAddress();
                 Transaction tx = new Transaction(ByteUtil.intToBytesNoLeadZeroes(i),
                         ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
                         ByteUtil.longToBytesNoLeadZeroes(0xfffff),
                         receiverAddr,
-                        ByteUtil.bigIntegerToBytes(EtherUtil.convert(7, EtherUtil.Unit.ETHER)),
+                        ByteUtil.bigIntegerToBytes(EtherUtil.convert(rand.nextInt(9) + 1, EtherUtil.Unit.ETHER)),
                         new byte[0],
                         ethereum.getChainIdForNextBlock()
                 );
@@ -55,14 +57,18 @@ public class DiscoveryNode extends BasicNode {
     }
 
     public void addNodeAddress(String hexId) {
-        byte[] bytes = Hex.decode(hexId);
-        if (!otherNodesAddresses.contains(bytes)) {
-            otherNodesAddresses.add(bytes);
+        if (!otherNodesAddresses.contains(hexId)) {
+            otherNodesAddresses.add(hexId);
         }
     }
 
+    Random rand = new Random();
     private byte[] getRandomAddress() {
-        Random rand = new Random();
-        return otherNodesAddresses.get(rand.nextInt(otherNodesAddresses.size()));
+        byte[] address;
+        do {
+            address = Hex.decode(otherNodesAddresses.get(rand.nextInt(otherNodesAddresses.size())));
+        } while (Arrays.equals(address, getMyAddress()));
+
+        return address;
     }
 }
