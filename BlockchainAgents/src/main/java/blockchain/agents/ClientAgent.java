@@ -22,7 +22,7 @@ import java.util.List;
 public class ClientAgent extends Agent {
     private static Gson gson = new Gson();
     private Wallet wallet = new Wallet();
-    private int intervalMiliseconds = 0;
+    private int intervalMiliseconds = 60000;
     private Ethereum amountToGet = new Ethereum(0);
     public ClientType clientType;
     public BasicNode ethereumNode;
@@ -40,14 +40,12 @@ public class ClientAgent extends Agent {
 
 
         //Args:
-        //          args[0] = interval to ask for get
-        //          args[1] = amount eth to get
-        //          args[2] = Client or Miner
+        //          args[0] = amount eth to get
+        //          args[1] = Client or Miner
 
         if (args != null && args.length > 0){
-            intervalMiliseconds = Integer.parseInt (args[0].toString());
-            amountToGet = new Ethereum(args[1].toString());
-            clientType =  ClientType.valueOf(args[2].toString());
+            amountToGet = new Ethereum(args[0].toString());
+            clientType =  ClientType.valueOf(args[1].toString());
         }
 
 

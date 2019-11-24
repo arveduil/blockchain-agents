@@ -11,7 +11,7 @@ import java.util.Stack;
 
 public class Configs {
 
-    private static String discoveryIp = "192.168.43.187:35000";
+    private static String discoveryIp = "192.168.0.39:35000";
 
     public static void setDiscoveryIp(String discoveryIp) {
         Configs.discoveryIp = discoveryIp + ":35000";

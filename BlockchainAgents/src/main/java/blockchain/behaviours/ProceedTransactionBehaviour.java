@@ -58,6 +58,7 @@ public class ProceedTransactionBehaviour extends Behaviour {
                         state = BuyerState.END;
                         break;
                     } else {
+                        sellersWhoRespondedWithProposal.remove(agent.getName());
                         int sellerIndexChoosen = new Random().nextInt(sellersWhoRespondedWithProposal.size());
                         sellerChoosen = (AID) sellersWhoRespondedWithProposal.get(sellerIndexChoosen);
                         state = BuyerState.SENDING_ACCEPT_PROPOSE_TO_SELLER;
@@ -127,9 +128,9 @@ public class ProceedTransactionBehaviour extends Behaviour {
         if (reply.getPerformative() == ACLMessage.PROPOSE) {
             sellersWhoRespondedWithProposal.add(reply.getSender());
 
-            Utils.log(agent.getLocalName(),"PROPOSE from seller" + reply.getSender().getName());
+            Utils.log(agent.getLocalName(),"PROPOSE from seller " + reply.getSender().getName());
         }else{
-            Utils.log(agent.getLocalName(),"REFUSE from seller" + reply.getSender().getName());
+            Utils.log(agent.getLocalName(),"REFUSE from seller " + reply.getSender().getName());
         }
     }
 

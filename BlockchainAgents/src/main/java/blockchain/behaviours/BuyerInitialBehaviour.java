@@ -33,11 +33,11 @@ public class BuyerInitialBehaviour extends TickerBehaviour {
     {
         Utils.log(clientAgent.getName(),"BuyerInitial isSynced " + clientAgent.ethereumNode.isSynced);
 
-        if(!clientAgent.ethereumNode.isSynced) return;
+        if(!clientAgent.ethereumNode.isSynced  && clientAgent.clientType != ClientType.Miner) return;
 
         clientAgent.setWalletState( clientAgent.ethereumNode.getBalance());
 
-        if(clientAgent.clientType == ClientType.Miner) return;
+        //if(desiredAmount.compareTo(new Ethereum("0")) == 0) return;
 
         Utils.log(clientAgent.getName(),"Buyers looks for " + desiredAmount);
         DFAgentDescription template = new DFAgentDescription();

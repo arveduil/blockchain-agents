@@ -1,0 +1,13 @@
+POST http://blockchainazureipserver.azurewebsites.net/api/SetIp
+content-type: application/json
+
+{
+  "Ip":"192.168.0.39:51419"
+}
+
+###
+
+GET http://blockchainazureipserver.azurewebsites.net/api/SetIp
+content-type: application/json
+
+###
